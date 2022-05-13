@@ -2,4 +2,4 @@
 
 ## development branch of the fraction protocol
 
-### https://fractiondev.netlify.app/
+### https://fractiondev.netlify.app
