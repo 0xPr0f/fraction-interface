@@ -9,7 +9,7 @@ import { Analytics } from "./components/Analytics";
 import { Trade } from "./components/Trade";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ethers } from "ethers";
+//import { ethers } from "ethers";
 
 function App() {
   const [tab, setTab] = useState();
@@ -46,9 +46,9 @@ function App() {
 
   ///////////////////////////////////////
 
-  function displayWalletModalpersonal() {
+  /* function displayWalletModalpersonal() {
     document.getElementById("myModal1").style.display = "block";
-  }
+  }*/
   function closeWalletModalpersonal() {
     document.getElementById("myModal1").style.display = "none";
   }
@@ -65,7 +65,7 @@ function App() {
     } else if (id === "2") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("walletconnect").style.display = "block";
-    } else if (id == "3") {
+    } else if (id === "3") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("coinbase").style.display = "block";
     } else if (id === "4") {
