@@ -53,12 +53,16 @@ function App() {
     document.getElementById("myModal1").style.display = "none";
   }
 
-  function personalWalletSection(id) {
-    closeWalletModal();
+  function secondaryWalletSection() {
     document.getElementById("metamask").style.display = "none";
     document.getElementById("walletconnect").style.display = "none";
     document.getElementById("coinbase").style.display = "none";
     document.getElementById("unstoppable").style.display = "none";
+  }
+
+  function personalWalletSection(id) {
+    closeWalletModal();
+    secondaryWalletSection();
     if (id === "1") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("metamask").style.display = "block";
