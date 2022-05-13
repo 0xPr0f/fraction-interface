@@ -187,7 +187,7 @@ function App() {
                     displayWalletModal();
                   }}
                 >
-                  Connect Wallet
+                  Connect Wallet1
                 </span>
               </button>
             </div>
