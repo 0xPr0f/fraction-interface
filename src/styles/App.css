@@ -1,0 +1,291 @@
+.App {
+  text-align: center;
+}
+body {
+  font-family: "Lato", sans-serif;
+  background-color: #ffffff;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  box-shadow: 0px 0px 2px 8px RGB(243, 246, 255);
+}
+
+.sidenav Link {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+  margin-left: 260px;
+}
+.main{
+  margin-top: 80px;
+}
+#mySidenav{
+width : 260px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.btn {
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  text-align: left;
+  background-color: transparent;
+  height: 50px;
+  width: 100%;
+/*color: #3498db; */
+  font-size: 1.3em;
+/*  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.6);*/
+}
+
+.btn:hover{
+
+  background-color:  #f7f5f5;
+}
+
+.txt{
+  margin-left: 65px;
+}
+
+.btn1:focus{
+  box-shadow: inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
+}
+.btn2:focus{
+  box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
+}
+.btn5:focus:focus{
+  box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
+}
+.btn3:focus{
+  box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
+}
+.btn4:focus{
+  box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
+}
+
+.navbar {
+  margin-right: 20px;
+  overflow: hidden;
+  background-color: #ffffff ;
+  position: fixed; 
+  height: 60px;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 8px 2px -2px RGB(243, 246, 255);
+/*  box-shadow: 0px 2px 8px RGB(243, 246, 255);*/
+}
+
+.navbar button {
+  float: left;
+  display: block;
+  color: #0363ff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+#loginholder {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+}
+.login{
+  border: none;
+  cursor: pointer;
+  position: relative;
+  top: 10px;
+  font-size: medium;
+  width: 150px;
+  height: 40px;
+  border-radius: 20px;
+  vertical-align: middle;
+  margin-right: 50px;
+}
+.login:hover{
+  border: 2px solid #0363ff;
+}
+
+.logintxt{
+  text-align: center;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+ /* height: px;*/
+ text-align: left;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  height: 440px;
+  border: 1px solid #888;
+  width: 370px;
+  border-radius: 10px;
+}
+
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1 {
+  color: #aaaaaa;
+  float: left;
+}
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.wallet {
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-radius: 8px;
+}
+.wallet1 {
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  color: black;
+  border: 1px solid gray;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-radius: 8px;
+}
+.wallet1a {
+  text-align: left;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  color: black;
+  border: 1px solid gray;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-radius: 8px;
+}
+.wallet:hover{
+  border: 2px solid #0363ff;
+}
+.wallet1:focus{
+  border: 2px solid #0363ff;
+}
+
+img {
+  float:right;
+}
+
+.textcursor{
+  pointer-events: none;
+  height: 100px;
+  cursor: text;
+  border-radius: 17px;
+}
+.textcursor:hover{
+background-color: #efefef;
+}
+.links{
+  text-decoration: none;
+}
+.links:hover{
+  text-decoration: underline;
+}
+
+/* wallet personal modat*/
+
+
+.modalwallet {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+ /* height: px;*/
+ text-align: left;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-contentwallet {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  height: 362px;
+  border: 1px solid #888;
+  width: 370px;
+  border-radius: 10px;
+}
+
+/*end of wallet personal modat*/
