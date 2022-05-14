@@ -71,7 +71,7 @@ width : 260px;
 .txt{
   margin-left: 65px;
 }
-
+/*
 .btn1:focus{
   box-shadow: inset 4px 0 0 0 RGB(3, 99, 255);
   color: #0363ff;
@@ -92,6 +92,7 @@ width : 260px;
   box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
   color: #0363ff;
 }
+*/
 
 .navbar {
   margin-right: 20px;
@@ -125,7 +126,19 @@ width : 260px;
   position: relative;
   top: 10px;
   font-size: medium;
-  width: 150px;
+  width: 160px;
+  height: 40px;
+  border-radius: 20px;
+  vertical-align: middle;
+  margin-right: 50px;
+}
+.swtichNetwork{
+  border: none;
+  cursor: pointer;
+  position: relative;
+  top: 10px;
+  font-size: medium;
+  width: 160px;
   height: 40px;
   border-radius: 20px;
   vertical-align: middle;
@@ -287,5 +300,55 @@ background-color: #efefef;
   width: 370px;
   border-radius: 10px;
 }
-
 /*end of wallet personal modat*/
+
+.connectedwalletdropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.connectedwalletdropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #FFFFFF;
+  margin-top: 10px;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.connectedwalletdropdown-content button {
+  color: black;
+/*  padding: 12px 16px; */
+  text-decoration: none;
+  display: block;
+}
+.onnectedwalletdropdown {
+  background-color: rgb(239,239,239);
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+
+}
+
+.connectedwalletdropdown-content button:hover {background-color: #ddd;}
+
+.connectedwalletdropdown:hover .connectedwalletdropdown-content {display: block;}
+
+.connectedwalletdropdown:hover .connectedwalletdropdowndropbtn {background-color: rgb(239,239,239);}
+.walletchange{
+  margin: 8px;
+  width: 180px;
+  height: 37px;
+  border-radius: 5px;
+  border: none;
+}
+.walletlogout{
+  background-color: #EFEFEF;
+  border: none;
+}
+.walletlogout:hover{
+  border: 2px solid #0363ff;
+}

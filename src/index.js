@@ -5,11 +5,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "@fortawesome/fontawesome-free/js/all.js";
 import "font-awesome/css/font-awesome.min.css";
+import { Web3ReactProvider } from "@web3-react/core";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Web3ReactProvider>
+      <App />
+    </Web3ReactProvider>
   </React.StrictMode>
 );
 

@@ -7,13 +7,71 @@ import { Link } from "react-router-dom";
 import { Mint } from "./components/Mint";
 import { Analytics } from "./components/Analytics";
 import { Trade } from "./components/Trade";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { ethers } from "ethers";
+import { ethers } from "ethers";
+import { getEllipsisTxt } from "./utils/ utils";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 function App() {
+  const APP_NAME = "Fraction Protocol";
+  const APP_LOGO_URL = "https://example.com/logo.png";
+  // const DEFAULT_ETH_JSONRPC_URL =
+  // "https://mainnet.infura.io/v3/5843244e30ef4b68b2a0cede1813a327";
+  //const DEFAULT_CHAIN_ID = 1;
+
   const [tab, setTab] = useState();
+  // Metamask signer
+  const [Signer, setSigner] = useState();
+  // Adddress
+  const [Address, setAddress] = useState();
+  ///
+  const [WalletCount, setWalletCount] = useState();
+  /// Wallet bools checks
+  const [isConnected, setIsConnected] = useState(false);
+  /////
+  const [currentChain, setcurrentChain] = useState();
   //  var modalClose = document.getElementsByClassName("close")[0];
+
+  /////////////// CoinBase Wallet ////////////////////
+  useEffect(() => {
+    // setIsConnected(window.localStorage.getItem("isConnected"));
+    if (isConnected !== false || isConnected !== undefined) {
+      setAddress(window.localStorage.getItem("address"));
+      //   JSON.parse(window.localStorage.getItem("signer"))?.getAddress()
+    }
+  }, [isConnected]);
+
+  ///////////// Wallet connection events ////////////////
+
+  // wallet connect
+  useEffect(() => {
+    window.ethereum.on("accountsChanged", (accounts) => {
+      // If user has locked/logout from MetaMask, this resets the accounts array to empty
+      setAddress(accounts);
+      if (!accounts.length) {
+        // logic to handle what happens once MetaMask is locked
+      }
+    });
+
+    // Subscribe to accounts change
+    walletconnectprovider.on("accountsChanged", (accounts) => {
+      setAddress(accounts);
+    });
+
+    // Subscribe to chainId change
+    walletconnectprovider.on("chainChanged", (chainId) => {
+      console.log(chainId);
+    });
+
+    // Subscribe to session disconnection
+    walletconnectprovider.on("disconnect", (code, reason) => {
+      console.log(code, reason);
+    });
+  });
+
+  ///////////// end of Wallet connection events ////////////////
 
   function displayWalletModal() {
     document.getElementById("myModal").style.display = "block";
@@ -30,6 +88,8 @@ function App() {
       document.getElementById("myModal").style.display = "none";
     } else if (event.target === document.getElementById("myModal1")) {
       document.getElementById("myModal1").style.display = "none";
+    } else {
+      document.getElementById("disconnect").style.display = "none";
     }
   };
 
@@ -60,26 +120,136 @@ function App() {
     document.getElementById("unstoppable").style.display = "none";
   }
 
+  /////////// Connecting to wallets code ////////////////////
+  /////////// Connecting to wallets code ////////////////////
+  /////////// Connecting to wallets code ////////////////////
+  /////////// Connecting to wallets code ////////////////////
+
+  async function connectWithMetamask() {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      setAddress(await signer.getAddress());
+      //  console.log(JSON.stringify(JSON.parse(provider)));
+      console.log(signer);
+      // window.localStorage.setItem("signer", JSON.stringify(provider));
+      setSigner(signer);
+      setIsConnected(true);
+      window.localStorage.setItem("isConnected", true);
+      window.localStorage.setItem("address", await signer.getAddress());
+      setWalletCount(1);
+      setAddress(await signer.getAddress());
+      console.log(Signer);
+      document.getElementById("myModal1").style.display = "none";
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  //////////////Wallet connect login /////////////////////////
+  const walletconnectprovider = new WalletConnectProvider({
+    infuraId: "5843244e30ef4b68b2a0cede1813a327",
+  });
+  async function connectWithWalletConnect() {
+    try {
+      await walletconnectprovider.enable();
+      const provider = new ethers.providers.Web3Provider(walletconnectprovider);
+      const signer = provider.getSigner();
+      setAddress(await signer.getAddress());
+      setWalletCount(2);
+      // window.localStorage.setItem("signer", JSON.stringify(signer));
+      setSigner(signer);
+      window.localStorage.setItem("address", await signer.getAddress());
+      setIsConnected(true);
+      window.localStorage.setItem("isConnected", true);
+      console.log(Signer);
+      document.getElementById("myModal1").style.display = "none";
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  //////////////Coinbase connect login /////////////////////////
+  const coinbaseWallet = new CoinbaseWalletSDK({
+    appName: APP_NAME,
+    appLogoUrl: APP_LOGO_URL,
+    darkMode: false,
+  });
+
+  async function connectWithCoinbase() {
+    try {
+      // Initialize a Web3 Provider object
+      const ethereum = coinbaseWallet
+        .makeWeb3Provider
+        //  DEFAULT_ETH_JSONRPC_URL,
+        // DEFAULT_CHAIN_ID
+        ();
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      setSigner(signer);
+      // window.localStorage.setItem("signer", JSON.stringify(signer));
+      setWalletCount(3);
+      setIsConnected(true);
+      setAddress(await signer.getAddress());
+      window.localStorage.setItem("address", await signer.getAddress());
+      console.log(Signer);
+      window.localStorage.setItem("isConnected", true);
+      document.getElementById("myModal1").style.display = "none";
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  /////////// end Connecting to wallets code ////////////////////
+  /////////// end Connecting to wallets code ////////////////////
+  /////////// end Connecting to wallets code ////////////////////
+  /////////// end Connecting to wallets code ////////////////////
+
+  /////////LOGOUT ////////////
+  async function logoutWallet() {
+    if (WalletCount === 1) {
+    } else if (WalletCount === 2) {
+      await walletconnectprovider.disconnect();
+    } else if (WalletCount === 3) {
+      coinbaseWallet.disconnect();
+    } else if (WalletCount === 4) {
+    }
+    document.getElementById("disconnect").style.display = "none";
+    setIsConnected(false);
+    console.log("logged out");
+    window.localStorage.setItem("isConnected", false);
+  }
+  /////////LOGOUT ////////////
+
   function personalWalletSection(id) {
     closeWalletModal();
     secondaryWalletSection();
     if (id === "1") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("metamask").style.display = "block";
+      connectWithMetamask();
     } else if (id === "2") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("walletconnect").style.display = "block";
+      connectWithWalletConnect();
     } else if (id === "3") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("coinbase").style.display = "block";
+      connectWithCoinbase();
     } else if (id === "4") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("unstoppable").style.display = "block";
     }
   }
+  function ToggleDisconnectModal() {
+    if (isConnected === true) {
+      document.getElementById("disconnect").style.display = "block";
+    }
+  }
 
   return (
-    <div>
+    <div id="mainscreen">
       <Router>
         <div>
           <div id="mySidenav" className="sidenav">
@@ -180,16 +350,116 @@ function App() {
             {/* Connect to wallet primary button */}
             <div className="navbar"></div>
             <div id="loginholder">
-              <button className="login">
+              <div className="connectedwalletdropdown">
+                <button
+                  style={{ marginRight: "50px", width: "200px" }}
+                  className="swtichNetwork connectedwalletdropdowndropbtn"
+                >
+                  <span className="logintxt">
+                    {currentChain} &nbsp;
+                    <FontAwesomeIcon
+                      style={{ float: "right", marginRight: "20px" }}
+                      icon="fa-solid fa-angle-down"
+                    />
+                  </span>
+                </button>
+                <div className="connectedwalletdropdown-content">
+                  <button
+                    onClick={() => {
+                      setcurrentChain("Rinkeby");
+                    }}
+                    className="walletchange"
+                  >
+                    Rinkeby
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setcurrentChain("Mumbai");
+                    }}
+                    className="walletchange"
+                  >
+                    Mumbai
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setcurrentChain("Arbitrum TN");
+                    }}
+                    className="walletchange"
+                  >
+                    Arbitrum TN
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setcurrentChain("ZK sync");
+                    }}
+                    className="walletchange"
+                  >
+                    ZK sync
+                  </button>
+                </div>
+              </div>
+
+              <button
+                onMouseEnter={() => {
+                  if (isConnected === true) {
+                    document.getElementById("disconnect").style.display =
+                      "block";
+                  }
+                }}
+                className="login"
+              >
                 <span
                   className="logintxt"
                   onClick={() => {
-                    displayWalletModal();
+                    if (isConnected === false) {
+                      displayWalletModal();
+                    }
                   }}
                 >
-                  Connect Wallet1
+                  {isConnected === false ? (
+                    "Connect Wallet"
+                  ) : (
+                    <span>
+                      {getEllipsisTxt(Address)}
+                      &nbsp;
+                      <FontAwesomeIcon icon="fa-solid fa-angle-down" />
+                      <br />
+                    </span>
+                  )}
                 </span>
               </button>
+              <div
+                onMouseLeave={() => {
+                  if (isConnected === true) {
+                    document.getElementById("disconnect").style.display =
+                      "none";
+                  }
+                }}
+                id="disconnect"
+                style={{ marginLeft: "200px", display: "none" }}
+              >
+                <br />
+                <div>
+                  <button
+                    onClick={() => {
+                      logoutWallet();
+                    }}
+                    className="walletlogout"
+                    style={{
+                      cursor: "pointer",
+                      width: "140px",
+                      height: "37px",
+                      borderRadius: "7px",
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+                <br />
+              </div>
             </div>
 
             <div id="myModal" className="modal">
@@ -515,8 +785,11 @@ function App() {
                 </div>
               </div>
             </div>
-            {/*Add extra stuff here below */}
+            {/*Connected Wallet accesories*/}
 
+            {/*end of Connected Wallet accesories*/}
+
+            {/*Add extra stuff here below */}
             {/*end of add extra stuff here below */}
           </div>
         </div>
