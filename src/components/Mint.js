@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import "../styles/Mint.css";
 
 export const Mint = () => {
-  const [minttype, setMintype] = useState();
+  const [minttype, setMintype] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState([]);
   function mint() {}
   function Minttype(type) {
     if (minttype === type) {
@@ -46,24 +49,43 @@ export const Mint = () => {
               <>
                 <br />
                 <br />
-                custom mint
                 <div>
-                  <p className="error"> error Lorem isplurm lol balh blah </p>
-
                   <div className="accountDetails">
-                    <h5>Account</h5>
-                    <p>address Lorem isplurm lol balh blah </p>
-                    <h5>Balance</h5>
-                    <p>balance Lorem isplurm lol balh blah </p>
-                    <h5>Trasactions</h5>
+                    <h5>Name</h5>
+                    <input
+                      type="text"
+                      className="inputFaucet"
+                      placeholder="NFT man"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
+                    <h5>Description</h5>
+                    <input
+                      type="text"
+                      className="inputFaucet"
+                      placeholder="An nft to showcase my fraction"
+                      value={description}
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                      }}
+                    />
+                    <h5>Image</h5>
 
-                    <p> Lorem isplurm lol balh blah </p>
+                    <input
+                      type="file"
+                      className="inputFaucet"
+                      placeholder="An nft to showcase my fraction"
+                      value={image}
+                      onChange={(e) => {
+                        setImage(e.target.value);
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="buttonCard">
-                  <button className="buttonstandard">
-                    Lorem isplurm lol balh blah
-                  </button>
+                  <button className="buttonstandard">Mint</button>
                 </div>
               </>
             ) : null}
