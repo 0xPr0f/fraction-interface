@@ -1,12 +1,43 @@
 import React, { useState } from "react";
 import "../styles/Mint.css";
+//import { NFTStorage, File } from "nft.storage";
 
 export const Mint = () => {
+  const NFT_STORAGE_KEY = "REPLACE_ME_WITH_YOUR_KEY";
   const [minttype, setMintype] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState([]);
-  function mint() {}
+
+  async function storeNFT() {
+    // create a new NFTStorage client using our API key
+    // const nftstorage = new NFTStorage({ token: NFT_STORAGE_KEY });
+    // call client.store, passing in the image & metadata
+    /* return nftstorage.store({
+      image,
+      name,
+      description,
+    }); */
+  }
+
+  async function onChange(e) {
+    const file = e.target.files[0];
+    try {
+      /*  const added = await client.add(file, {
+        progress: (prog) => console.log(`received: ${prog}`),
+      }); */
+      // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      // setImage(url);
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
+  }
+
+  async function mint() {
+    const url = await storeNFT();
+    console.log(url);
+  }
+
   function Minttype(type) {
     if (minttype === type) {
       setMintype("3");
@@ -72,15 +103,14 @@ export const Mint = () => {
                       }}
                     />
                     <h5>Image</h5>
+                    <img src={image} alt="" />
 
+                    <label htmlFor="upload-photo">Browse...</label>
                     <input
                       type="file"
-                      className="inputFaucet"
+                      id="upload-photo"
                       placeholder="An nft to showcase my fraction"
-                      value={image}
-                      onChange={(e) => {
-                        setImage(e.target.value);
-                      }}
+                      onClick={onChange}
                     />
                   </div>
                 </div>

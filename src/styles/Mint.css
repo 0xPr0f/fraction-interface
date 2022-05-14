@@ -36,3 +36,13 @@
     text-align: center;
   }
   
+  label {
+    cursor: pointer;
+    /* Style as you please, it will become the visible UI component. */
+ }
+ #upload-photo {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+ }
+ 
