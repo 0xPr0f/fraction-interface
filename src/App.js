@@ -13,6 +13,7 @@ import { ethers } from "ethers";
 import { getEllipsisTxt } from "./utils/ utils";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
+import { Faucet } from "./components/Faucet";
 
 function App() {
   const APP_NAME = "Fraction Protocol";
@@ -43,13 +44,44 @@ function App() {
     }
   }, [isConnected]);
 
+  useEffect(() => {
+    if (window.location.pathname === "/") {
+      document.getElementById("btn1").style.color = "#0363ff";
+      document.getElementById("btn1").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    } else if (
+      window.location.pathname === "/fraction" ||
+      window.location.pathname === "/trade"
+    ) {
+      document.getElementById("btn2").style.color = "#0363ff";
+      document.getElementById("btn2").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    } else if (window.location.pathname === "/mint") {
+      document.getElementById("btn5").style.color = "#0363ff";
+      document.getElementById("btn5").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    } else if (window.location.pathname === "/stake") {
+      document.getElementById("btn3").style.color = "#0363ff";
+      document.getElementById("btn3").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    } else if (window.location.pathname === "/analytics") {
+      document.getElementById("btn4").style.color = "#0363ff";
+      document.getElementById("btn4").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    } else if (window.location.pathname === "/faucet") {
+      document.getElementById("btn6").style.color = "#0363ff";
+      document.getElementById("btn6").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+  });
+
   ///////////// Wallet connection events ////////////////
 
   // wallet connect
   useEffect(() => {
     window.ethereum.on("accountsChanged", (accounts) => {
       // If user has locked/logout from MetaMask, this resets the accounts array to empty
-      setAddress(accounts);
+      setAddress(getEllipsisTxt(accounts));
       if (!accounts.length) {
         // logic to handle what happens once MetaMask is locked
       }
@@ -101,6 +133,10 @@ function App() {
     document.getElementById(`${id}`).style.color = "#0363ff";
     document.getElementById(`${id}`).style.boxShadow =
       "inset 4px 0 0 0 RGB(3, 99, 255)";
+    document.getElementById(`${id}`).style.color = "#0363ff";
+    document.getElementById(`${id}`).style.boxShadow =
+      "inset 4px 0 0 0 RGB(3, 99, 255)";
+
     setTab(id);
   }
 
@@ -297,7 +333,7 @@ function App() {
                 <span className="txt">
                   {" "}
                   <FontAwesomeIcon icon="fa-solid fa-scale-balanced" />{" "}
-                  &nbsp;Trade
+                  &nbsp;Fraction
                 </span>
               </button>
             </Link>
@@ -330,6 +366,23 @@ function App() {
                 </span>
               </button>
             </Link>
+            <br />
+            <br />
+            <br />
+            <Link to="/faucet">
+              <button
+                onClick={() => {
+                  updateTheme("btn6");
+                }}
+                className="btn btn6"
+                id="btn6"
+              >
+                <span className="txt">
+                  <FontAwesomeIcon icon="fa-solid fa-faucet-drip" />
+                  &nbsp;Faucet
+                </span>
+              </button>
+            </Link>
           </div>
 
           <div id="main" className="main App">
@@ -337,8 +390,9 @@ function App() {
               <Route path="/" element={<User />} />
               <Route path="/stake" element={<Stake />} />
               <Route path="/mint" element={<Mint />} />
-              <Route path="/trade" element={<Trade />} />
+              <Route path="/fraction" element={<Trade />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/faucet" element={<Faucet />} />
             </Routes>
             <button
               onClick={() => {
