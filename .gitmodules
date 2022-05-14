@@ -1,0 +1,3 @@
+[submodule "fraction-contracts"]
+	path = fraction-contracts
+	url = https://github.com/0xPr0f/fraction-contracts.git
