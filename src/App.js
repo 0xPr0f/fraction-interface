@@ -14,7 +14,7 @@ import { getEllipsisTxt } from "./utils/ utils";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import { Faucet } from "./components/Faucet";
-import { Provider } from "moralis/node_modules/@ethersproject/providers";
+import { stringify, parse } from "flatted";
 
 function App() {
   const APP_NAME = "Fraction Protocol";
@@ -49,26 +49,36 @@ function App() {
       setAddress(getEllipsisTxt(window.localStorage.getItem("address")));
     }
   });
+  useEffect(() => {});
   useEffect(() => {
-    const provider = ethers.getDefaultProvider();
-    provider.getBlockNumber().then((result) => {
-      setBlock(result);
-    });
+    checkChain();
   });
-  useEffect(() => {
+  async function checkChain() {
     if (chain === "4" || chain === "0x4") {
+      // JSON.stringify((await provider.getNetwork()).chainId)
+      const provider = ethers.getDefaultProvider();
+      provider.getBlockNumber().then((result) => {
+        setBlock(result);
+      });
       setcurrentChain("Rinkeby");
-    } else if (chain === "137" || chain === "0x89") {
-      setcurrentChain("Polygon");
     } else if (chain === "0x13881" || chain === "80001") {
+      const res = await fetch(
+        "https://api.covalenthq.com/v1/80001/block_v2/latest/?quote-currency=USD&format=JSON&key=ckey_e22bfa8a9c734c1e816244b1529"
+      );
+      const data = await res.json();
+      setBlock(JSON.parse(JSON.stringify(data)).data.items[0].height);
       setcurrentChain("Mumbai");
-    } else if (chain === "0x66eeb") {
+    } else if (chain === "0x66eeb" || chain === "421611") {
+      const res = await fetch(
+        "https://api.covalenthq.com/v1/421611/block_v2/latest/?quote-currency=USD&format=JSON&key=ckey_e22bfa8a9c734c1e816244b1529"
+      );
+      const data = await res.json();
+      setBlock(JSON.parse(JSON.stringify(data)).data.items[0].height);
       setcurrentChain("Arbitrum Testnet");
     } else {
       setcurrentChain("chain not supported");
     }
-  });
-  function checkChain() {}
+  }
 
   useEffect(() => {
     if (window.location.pathname === "/") {
@@ -213,6 +223,7 @@ function App() {
       console.log(JSON.stringify((await provider.getNetwork()).chainId));
       setSigner(signer);
       setIsConnected(true);
+      window.localStorage.setItem("signer", stringify(signer));
       window.localStorage.setItem("isConnected", true);
       window.localStorage.setItem(
         "chainid",
@@ -243,6 +254,7 @@ function App() {
       // window.localStorage.setItem("signer", JSON.stringify(signer));
       setSigner(signer);
       window.localStorage.setItem("address", await signer.getAddress());
+      window.localStorage.setItem("signer", stringify(signer));
       window.localStorage.setItem(
         "chainid",
         JSON.stringify((await provider.getNetwork()).chainId)
@@ -282,6 +294,7 @@ function App() {
       setIsConnected(true);
       setAddress(await signer.getAddress());
       window.localStorage.setItem("address", await signer.getAddress());
+      window.localStorage.setItem("signer", stringify(signer));
       window.localStorage.setItem(
         "chainid",
         JSON.stringify((await provider.getNetwork()).chainId)
@@ -312,6 +325,7 @@ function App() {
     setIsConnected(false);
     console.log("logged out");
     window.localStorage.setItem("address", "");
+    window.localStorage.setItem("signer", "");
     window.localStorage.setItem("isConnected", false);
   }
   /////////LOGOUT ////////////
@@ -337,13 +351,6 @@ function App() {
       document.getElementById("unstoppable").style.display = "block";
     }
   }
-  function ToggleDisconnectModal() {
-    if (isConnected === true) {
-      document.getElementById("disconnect").style.display = "block";
-    }
-  }
-
-  function checkBlockOnScan() {}
   return (
     <div id="mainscreen">
       <Router>
@@ -489,6 +496,18 @@ function App() {
                     className="walletchange"
                   >
                     Rinkeby
+                  </button>
+                  <button
+                    onClick={async () => {
+                      setcurrentChain("Mumbai");
+                      await window.ethereum.request({
+                        method: "wallet_switchEthereumChain",
+                        params: [{ chainId: "0x13881" }],
+                      });
+                    }}
+                    className="walletchange"
+                  >
+                    Mumbai
                   </button>
 
                   <button
@@ -972,13 +991,7 @@ function App() {
             {/*Add extra stuff here below */}
             {/*end of add extra stuff here below */}
             <div style={{ fontSize: "13px" }} id="block">
-              <span
-                onClick={() => {
-                  checkBlockOnScan();
-                }}
-              >
-                {block}
-              </span>
+              <span>{block}</span>
               &nbsp;
               <FontAwesomeIcon
                 style={{

@@ -1,9 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { FractionTokenABI } from "../utils/Fraction Token";
 import "../styles/Faucet.css";
+import { parse } from "flatted";
 
 export const Faucet = () => {
   const [address, setAddress] = useState("");
-  const [tokenLeft, setTokenLeft] = useState("1000000");
+  const [tokenLeft, setTokenLeft] = useState("");
+  const provider = ethers.getDefaultProvider();
+  const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
+
+  const Tokencontract = new ethers.Contract(
+    contractaddress,
+    FractionTokenABI,
+    parse(window.localStorage.getItem("signer"))
+  );
+
+  useEffect(() => {
+    updateUI();
+    console.log(window.localStorage.getItem("signer"));
+  });
+  async function updateUI() {
+    if (
+      window.localStorage.getItem("signer") !== null ||
+      window.localStorage.getItem("signer") !== ""
+    ) {
+      setTokenLeft(
+        await Tokencontract.balanceOf(
+          "0x953f88014255241332d8841C34921572db112D65"
+        )
+      );
+    }
+  }
   return (
     <div>
       {" "}
