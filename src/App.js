@@ -9,11 +9,12 @@ import { Analytics } from "./components/Analytics";
 import { Trade } from "./components/Trade";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ethers } from "ethers";
+import { ethers, providers } from "ethers";
 import { getEllipsisTxt } from "./utils/ utils";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import { Faucet } from "./components/Faucet";
+import { Provider } from "moralis/node_modules/@ethersproject/providers";
 
 function App() {
   const APP_NAME = "Fraction Protocol";
@@ -21,12 +22,13 @@ function App() {
   // const DEFAULT_ETH_JSONRPC_URL =
   // "https://mainnet.infura.io/v3/5843244e30ef4b68b2a0cede1813a327";
   //const DEFAULT_CHAIN_ID = 1;
-
   const [tab, setTab] = useState();
   // Metamask signer
   const [Signer, setSigner] = useState();
   // Adddress
   const [Address, setAddress] = useState();
+
+  const [ConnectionStatus, setConnectionStatus] = useState();
   ///
   const [WalletCount, setWalletCount] = useState();
   /// Wallet bools checks
@@ -34,25 +36,46 @@ function App() {
   /////
   const [currentChain, setcurrentChain] = useState();
   //  var modalClose = document.getElementsByClassName("close")[0];
+  const [chain, setChain] = useState();
+  const [block, setBlock] = useState();
 
-  /////////////// CoinBase Wallet ////////////////////
   useEffect(() => {
-    // setIsConnected(window.localStorage.getItem("isConnected"));
-    if (isConnected !== false || isConnected !== undefined) {
-      setAddress(window.localStorage.getItem("address"));
-      //   JSON.parse(window.localStorage.getItem("signer"))?.getAddress()
+    const connected = window.localStorage.getItem("isConnected") === "true";
+    setChain(window.localStorage.getItem("chainid"));
+    checkChain();
+    setIsConnected(connected);
+    if (window.localStorage.getItem("isConnected") === "true") {
+      setChain(window.localStorage.getItem("chainid"));
+      setAddress(getEllipsisTxt(window.localStorage.getItem("address")));
     }
-  }, [isConnected]);
+  });
+  useEffect(() => {
+    const provider = ethers.getDefaultProvider();
+    provider.getBlockNumber().then((result) => {
+      setBlock(result);
+    });
+  });
+  useEffect(() => {
+    if (chain === "4" || chain === "0x4") {
+      setcurrentChain("Rinkeby");
+    } else if (chain === "137" || chain === "0x89") {
+      setcurrentChain("Polygon");
+    } else if (chain === "0x13881" || chain === "80001") {
+      setcurrentChain("Mumbai");
+    } else if (chain === "0x66eeb") {
+      setcurrentChain("Arbitrum Testnet");
+    } else {
+      setcurrentChain("chain not supported");
+    }
+  });
+  function checkChain() {}
 
   useEffect(() => {
     if (window.location.pathname === "/") {
       document.getElementById("btn1").style.color = "#0363ff";
       document.getElementById("btn1").style.boxShadow =
         "inset 4px 0 0 0 RGB(3, 99, 255)";
-    } else if (
-      window.location.pathname === "/fraction" ||
-      window.location.pathname === "/trade"
-    ) {
+    } else if (window.location.pathname === "/fraction") {
       document.getElementById("btn2").style.color = "#0363ff";
       document.getElementById("btn2").style.boxShadow =
         "inset 4px 0 0 0 RGB(3, 99, 255)";
@@ -82,24 +105,40 @@ function App() {
     window.ethereum.on("accountsChanged", (accounts) => {
       // If user has locked/logout from MetaMask, this resets the accounts array to empty
       setAddress(getEllipsisTxt(accounts));
+      window.localStorage.setItem("address", accounts);
       if (!accounts.length) {
+        window.localStorage.setItem("isConnected", false);
+        setIsConnected(false);
         // logic to handle what happens once MetaMask is locked
+      }
+      if (accounts.length === 0) {
+        window.localStorage.setItem("isConnected", false);
       }
     });
 
+    window.ethereum.on("chainChanged", (chainId) => {
+      window.localStorage.setItem("chainid", chainId);
+      setChain(window.localStorage.getItem("chainid"));
+      checkChain();
+    });
     // Subscribe to accounts change
     walletconnectprovider.on("accountsChanged", (accounts) => {
-      setAddress(accounts);
+      setAddress(accounts[0]);
+      window.localStorage.setItem("address", accounts[0]);
     });
 
     // Subscribe to chainId change
     walletconnectprovider.on("chainChanged", (chainId) => {
-      console.log(chainId);
+      window.localStorage.setItem("chainid", chainId);
+      setChain(window.localStorage.getItem("chainid"));
+      checkChain();
     });
 
     // Subscribe to session disconnection
     walletconnectprovider.on("disconnect", (code, reason) => {
       console.log(code, reason);
+      setIsConnected(false);
+      window.localStorage.setItem("isConnected", false);
     });
   });
 
@@ -163,22 +202,28 @@ function App() {
 
   async function connectWithMetamask() {
     try {
+      setConnectionStatus(true);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
+
       const signer = provider.getSigner();
       setAddress(await signer.getAddress());
       //  console.log(JSON.stringify(JSON.parse(provider)));
-      console.log(signer);
       // window.localStorage.setItem("signer", JSON.stringify(provider));
+      console.log(JSON.stringify((await provider.getNetwork()).chainId));
       setSigner(signer);
       setIsConnected(true);
       window.localStorage.setItem("isConnected", true);
+      window.localStorage.setItem(
+        "chainid",
+        JSON.stringify((await provider.getNetwork()).chainId)
+      );
       window.localStorage.setItem("address", await signer.getAddress());
       setWalletCount(1);
       setAddress(await signer.getAddress());
-      console.log(Signer);
       document.getElementById("myModal1").style.display = "none";
     } catch (e) {
+      setConnectionStatus(false);
       console.log(e);
     }
   }
@@ -189,6 +234,7 @@ function App() {
   });
   async function connectWithWalletConnect() {
     try {
+      setConnectionStatus(true);
       await walletconnectprovider.enable();
       const provider = new ethers.providers.Web3Provider(walletconnectprovider);
       const signer = provider.getSigner();
@@ -197,11 +243,16 @@ function App() {
       // window.localStorage.setItem("signer", JSON.stringify(signer));
       setSigner(signer);
       window.localStorage.setItem("address", await signer.getAddress());
+      window.localStorage.setItem(
+        "chainid",
+        JSON.stringify((await provider.getNetwork()).chainId)
+      );
       setIsConnected(true);
       window.localStorage.setItem("isConnected", true);
       console.log(Signer);
       document.getElementById("myModal1").style.display = "none";
     } catch (e) {
+      setConnectionStatus(false);
       console.log(e);
     }
   }
@@ -215,25 +266,30 @@ function App() {
 
   async function connectWithCoinbase() {
     try {
+      setConnectionStatus(true);
       // Initialize a Web3 Provider object
-      const ethereum = coinbaseWallet
-        .makeWeb3Provider
-        //  DEFAULT_ETH_JSONRPC_URL,
-        // DEFAULT_CHAIN_ID
-        ();
+      const ethereum = coinbaseWallet.makeWeb3Provider();
+      //  DEFAULT_ETH_JSONRPC_URL,
+      // DEFAULT_CHAIN_ID
+
       const provider = new ethers.providers.Web3Provider(ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       setSigner(signer);
+
       // window.localStorage.setItem("signer", JSON.stringify(signer));
       setWalletCount(3);
       setIsConnected(true);
       setAddress(await signer.getAddress());
       window.localStorage.setItem("address", await signer.getAddress());
-      console.log(Signer);
+      window.localStorage.setItem(
+        "chainid",
+        JSON.stringify((await provider.getNetwork()).chainId)
+      );
       window.localStorage.setItem("isConnected", true);
       document.getElementById("myModal1").style.display = "none";
     } catch (e) {
+      setConnectionStatus(false);
       console.log(e);
     }
   }
@@ -244,6 +300,7 @@ function App() {
 
   /////////LOGOUT ////////////
   async function logoutWallet() {
+    setConnectionStatus(true);
     if (WalletCount === 1) {
     } else if (WalletCount === 2) {
       await walletconnectprovider.disconnect();
@@ -254,6 +311,7 @@ function App() {
     document.getElementById("disconnect").style.display = "none";
     setIsConnected(false);
     console.log("logged out");
+    window.localStorage.setItem("address", "");
     window.localStorage.setItem("isConnected", false);
   }
   /////////LOGOUT ////////////
@@ -264,6 +322,7 @@ function App() {
     if (id === "1") {
       document.getElementById("myModal1").style.display = "block";
       document.getElementById("metamask").style.display = "block";
+
       connectWithMetamask();
     } else if (id === "2") {
       document.getElementById("myModal1").style.display = "block";
@@ -284,6 +343,7 @@ function App() {
     }
   }
 
+  function checkBlockOnScan() {}
   return (
     <div id="mainscreen">
       <Router>
@@ -322,7 +382,7 @@ function App() {
               </button>
             </Link>
 
-            <Link to="/trade">
+            <Link to="/fraction">
               <button
                 onClick={() => {
                   updateTheme("btn2");
@@ -419,8 +479,12 @@ function App() {
                 </button>
                 <div className="connectedwalletdropdown-content">
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       setcurrentChain("Rinkeby");
+                      await window.ethereum.request({
+                        method: "wallet_switchEthereumChain",
+                        params: [{ chainId: "0x4" }],
+                      });
                     }}
                     className="walletchange"
                   >
@@ -428,21 +492,16 @@ function App() {
                   </button>
 
                   <button
-                    onClick={() => {
-                      setcurrentChain("Mumbai");
+                    onClick={async () => {
+                      setcurrentChain("Arbitrum Tetnet");
+                      await window.ethereum.request({
+                        method: "wallet_switchEthereumChain",
+                        params: [{ chainId: "0x66eeb" }],
+                      });
                     }}
                     className="walletchange"
                   >
-                    Mumbai
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setcurrentChain("Arbitrum TN");
-                    }}
-                    className="walletchange"
-                  >
-                    Arbitrum TN
+                    Arbitrum Testnet
                   </button>
 
                   <button
@@ -623,7 +682,8 @@ function App() {
                 </div>
               </div>
             </div>
-
+            {/*/////////////////////////////////////////////////////////////////////////*/}
+            {/*/////////////////////////////////////////////////////////////////////////*/}
             <div id="myModal1" className="modalwallet">
               <div className="modal-contentwallet">
                 <div>
@@ -689,7 +749,29 @@ function App() {
                       }}
                       className="wallet1a"
                     >
-                      Conecting...
+                      {ConnectionStatus === true ? (
+                        "Conecting..."
+                      ) : (
+                        <>
+                          Connection failed
+                          <span
+                            onClick={() => {
+                              connectWithMetamask();
+                            }}
+                            className="tryagain"
+                            style={{
+                              fontSize: "19px",
+                              marginLeft: "20px",
+                              width: "30px",
+                              borderStyle: "solid",
+                              borderWidth: "2px",
+                              borderColor: "red",
+                            }}
+                          >
+                            TRY AGAIN
+                          </span>
+                        </>
+                      )}
                     </button>
                     <br />
 
@@ -729,7 +811,29 @@ function App() {
                       }}
                       className="wallet1a"
                     >
-                      Connecting...
+                      {ConnectionStatus === true ? (
+                        "Conecting..."
+                      ) : (
+                        <>
+                          Connection failed
+                          <span
+                            onClick={() => {
+                              connectWithWalletConnect();
+                            }}
+                            className="tryagain"
+                            style={{
+                              fontSize: "19px",
+                              marginLeft: "20px",
+                              width: "30px",
+                              borderStyle: "solid",
+                              borderWidth: "2px",
+                              borderColor: "red",
+                            }}
+                          >
+                            TRY AGAIN
+                          </span>
+                        </>
+                      )}
                     </button>
                     <br />
                     <button
@@ -769,7 +873,29 @@ function App() {
                       }}
                       className="wallet1a"
                     >
-                      Connecting...
+                      {ConnectionStatus === true ? (
+                        "Conecting..."
+                      ) : (
+                        <>
+                          Connection failed
+                          <span
+                            onClick={() => {
+                              connectWithCoinbase();
+                            }}
+                            className="tryagain"
+                            style={{
+                              fontSize: "19px",
+                              marginLeft: "20px",
+                              width: "30px",
+                              borderStyle: "solid",
+                              borderWidth: "2px",
+                              borderColor: "red",
+                            }}
+                          >
+                            TRY AGAIN
+                          </span>
+                        </>
+                      )}
                     </button>
                     <br />
                     <button
@@ -845,6 +971,25 @@ function App() {
 
             {/*Add extra stuff here below */}
             {/*end of add extra stuff here below */}
+            <div style={{ fontSize: "13px" }} id="block">
+              <span
+                onClick={() => {
+                  checkBlockOnScan();
+                }}
+              >
+                {block}
+              </span>
+              &nbsp;
+              <FontAwesomeIcon
+                style={{
+                  color: "rgb(37,174,97)",
+                  marginBottom: "3px",
+                  width: "7px",
+                  height: "7px",
+                }}
+                icon="fa-solid fa-circle"
+              />
+            </div>
           </div>
         </div>
       </Router>

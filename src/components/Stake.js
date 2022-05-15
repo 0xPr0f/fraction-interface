@@ -5,6 +5,7 @@ export const Stake = () => {
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
   const [tokeninwallet, settokeninwallet] = useState(20);
+  const [tokenstaked, settokenStaked] = useState(20);
   function stake() {
     console.log("staking");
   }
@@ -57,13 +58,34 @@ export const Stake = () => {
                 <br />
                 <br />
                 <div>
-                  <div className="accountDetails">
-                    <h5>Name</h5>
-
-                    <h5>Description</h5>
-
-                    <h5>Image</h5>
+                  <span
+                    style={{
+                      // marginTop: "0px",
+                      fontSize: "14px",
+                      float: "left",
+                    }}
+                  >
+                    STAKED FRACT tokens in wallet : {tokenstaked} FRACT
+                  </span>
+                  <br />
+                  <div>
+                    <div>
+                      <input
+                        style={{ fontSize: "18px" }}
+                        type="text"
+                        className="inputFaucet"
+                        placeholder="Amount"
+                        value={unstakeamount}
+                        onChange={(e) => {
+                          setUnStakeAmount(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div style={{ float: "left" }}>Stake Rewards : {}</div>
+                    <br />
                   </div>
+                  <br />
+                  <br />
                 </div>
                 <div className="buttonCard">
                   <button className="buttonstandard">UNSTAKE</button>
@@ -87,6 +109,7 @@ export const Stake = () => {
                   <br />
                   <div>
                     <input
+                      style={{ fontSize: "18px" }}
                       type="text"
                       className="inputFaucet"
                       placeholder="Amount"

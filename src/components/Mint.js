@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Mint.css";
+import { providers } from "ethers";
 //import { NFTStorage, File } from "nft.storage";
 
 export const Mint = () => {
@@ -17,6 +18,7 @@ export const Mint = () => {
       image,
       name,
       description,
+
     }); */
   }
 
@@ -34,10 +36,11 @@ export const Mint = () => {
   }
 
   async function mint() {
-    const url = await storeNFT();
-    console.log(url);
+    console.log("mint with custom");
   }
-
+  function mintdefault() {
+    console.log("mint with defualt");
+  }
   function Minttype(type) {
     if (minttype === type) {
       setMintype("3");
@@ -55,33 +58,34 @@ export const Mint = () => {
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div className="pageboxmint">
-          <h2> choose mint type </h2>
-          <button
-            id="mintype1"
-            onClick={() => {
-              Minttype("1");
-            }}
-            className="buttonstandardchoose"
-          >
-            Customise
-          </button>
-          <br />
-          <button
-            id="mintype2"
-            onClick={() => {
-              Minttype("2");
-            }}
-            className="buttonstandardchoose"
-          >
-            Defualt
-          </button>
+          <h2> Mint Fraction NFT </h2>
+          <div style={{ display: "flex" }}>
+            <button
+              id="mintype1"
+              onClick={() => {
+                Minttype("1");
+              }}
+              className="buttonstandardchoose"
+            >
+              Customise
+            </button>
+            <div style={{ fontSize: "30px" }}>/</div>
+            <button
+              id="mintype2"
+              onClick={() => {
+                Minttype("2");
+              }}
+              className="buttonstandardchoose"
+            >
+              Defualt
+            </button>
+          </div>
           <div>
             {minttype === "1" ? (
               <>
-                <br />
-                <br />
                 <div>
                   <div className="accountDetails">
+                    <br />
                     <h5>Name</h5>
                     <input
                       type="text"
@@ -93,7 +97,12 @@ export const Mint = () => {
                       }}
                     />
                     <h5>Description</h5>
-                    <input
+                    <textarea
+                      style={{
+                        maxWidth: "375px",
+                        minWidth: "374px",
+                        minHeight: "30px",
+                      }}
                       type="text"
                       className="inputFaucet"
                       placeholder="An nft to showcase my fraction"
@@ -106,16 +115,25 @@ export const Mint = () => {
                     <img src={image} alt="" />
 
                     <label htmlFor="upload-photo">Browse...</label>
+                    <br />
                     <input
                       type="file"
                       id="upload-photo"
                       placeholder="An nft to showcase my fraction"
                       onClick={onChange}
                     />
+                    <br />
                   </div>
                 </div>
                 <div className="buttonCard">
-                  <button className="buttonstandard">Mint</button>
+                  <button
+                    onClick={() => {
+                      mint();
+                    }}
+                    className="buttonstandard"
+                  >
+                    Mint
+                  </button>
                 </div>
               </>
             ) : null}
@@ -130,14 +148,24 @@ export const Mint = () => {
                     style={{ fontWeight: "bold" }}
                     className="accountDetails"
                   >
-                    - Mint with defualt settings -
+                    <h5>Name</h5>
+                    <input
+                      type="text"
+                      className="inputFaucet"
+                      placeholder="NFT man"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                    />
+                    <br />- Mint with defualt settings -
                   </div>
                 </div>
                 <br />
                 <div className="buttonCard">
                   <button
                     onClick={() => {
-                      mint();
+                      mintdefault();
                     }}
                     className="buttonstandard"
                   >

@@ -362,3 +362,17 @@ background-color: #efefef;
   width: 100%;
   cursor: pointer;
 }
+#block {
+  cursor: pointer;
+  position: fixed;
+  color: #286242;
+  margin: 20px;
+  bottom: 0;
+  right: 0;
+}
+#block:hover{
+  color: #25AE61;
+}
+.tryagain:hover{
+  cursor: pointer;
+}
