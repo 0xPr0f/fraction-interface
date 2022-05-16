@@ -14,15 +14,10 @@ export const Mint = () => {
 
   const contractaddress = "";
   var provider;
-
   const walletconnectprovider = new WalletConnectProvider({
     infuraId: "5843244e30ef4b68b2a0cede1813a327",
   });
-  if (window.localStorage.getItem("connection") !== "metamask") {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-  } else if (window.localStorage.getItem("connection") === "walletconnect") {
-    provider = new ethers.providers.Web3Provider(walletconnectprovider);
-  }
+  provider = new ethers.providers.Web3Provider(window.ethereum);
   const NFTcontract = new ethers.Contract(
     contractaddress,
     FractionNFTABI,

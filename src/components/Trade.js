@@ -2,17 +2,19 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ERC20ABI } from "../utils/ERC20";
+import { FractionWrapperABI } from "../utils/FractionWrapper";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export const Trade = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
+  const [address, setAddress] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
   const [tokeninwallet, settokeninwallet] = useState();
   const [tokenstaked, settokenStaked] = useState();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  function stake() {
-    console.log("staking");
-  }
+  var provider;
+  //const provider = new ethers.providers.Web3Provider(window.ethereum);
+
   function Minttype(type) {
     if (type === "1") {
       document.getElementById("mintype1").style.backgroundColor = "transparent";
@@ -22,30 +24,22 @@ export const Trade = () => {
     }
     setStaketype(type);
   }
-  /*
-  const contractaddress = "";
- 
+
+  const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
+
+  provider = new ethers.providers.Web3Provider(window.ethereum);
   const Tokencontract = new ethers.Contract(
     contractaddress,
-    [],
+    FractionWrapperABI,
     provider.getSigner()
   );
 
-  useEffect(() => {
-    updateUI();
-  });
-  async function updateUI() {
-    if (
-      window.localStorage.getItem("signer") !== null ||
-      window.localStorage.getItem("signer") !== ""
-    ) {
-      const x = await Tokencontract.balanceOf(
-        window.localStorage.getItem("address")
-      );
-      settokeninwallet(Number.parseFloat(x.toString()));
-    }
+  function stake() {
+    // Tokencontract;
   }
-*/
+  function unstake() {
+    // Tokencontract;
+  }
   const ERC20 = new ethers.Contract(
     "0xb64845d53a373d35160b72492818f0d2f51292c0",
     ERC20ABI,
@@ -123,7 +117,9 @@ export const Trade = () => {
                   <br />
                 </div>
                 <div className="buttonCard">
-                  <button className="buttonstandard">UNWRAP</button>
+                  <button onClick={unstake} className="buttonstandard">
+                    UNWRAP
+                  </button>
                 </div>
               </>
             ) : (
@@ -139,7 +135,8 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    FRACT tokens in wallet : {tokeninwallet} FRACT
+                    <br /> FRACT Token Address :
+                    0x953f88014255241332d8841C34921572db112D65
                   </span>
                   <br />
                   <div>
@@ -147,10 +144,10 @@ export const Trade = () => {
                       style={{ fontSize: "18px" }}
                       type="text"
                       className="inputFaucet"
-                      placeholder="Amount"
-                      value={stakeamount}
+                      placeholder="Token Address"
+                      value={address}
                       onChange={(e) => {
-                        setStakeAmount(e.target.value);
+                        setAddress(e.target.value);
                       }}
                     />
                   </div>
@@ -160,9 +157,7 @@ export const Trade = () => {
                       fontSize: "14px",
                       float: "left",
                     }}
-                  >
-                    FRACT tokens : {tokeninwallet} FRACT
-                  </span>
+                  ></span>
                   <br />
                   <div>
                     <input

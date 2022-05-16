@@ -319,7 +319,7 @@ function App() {
   async function logoutWallet() {
     setConnectionStatus(true);
     if (WalletCount === 1) {
-      console.log(window.ethereum);
+      coinbaseWallet.disconnect();
     } else if (WalletCount === 2) {
       await walletconnectprovider.disconnect();
     } else if (WalletCount === 3) {

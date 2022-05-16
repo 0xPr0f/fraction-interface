@@ -13,15 +13,7 @@ export const Faucet = () => {
   var provider;
   const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
 
-  const walletconnectprovider = new WalletConnectProvider({
-    infuraId: "5843244e30ef4b68b2a0cede1813a327",
-  });
-  if (window.localStorage.getItem("connection") !== "metamask") {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-  } else if (window.localStorage.getItem("connection") === "walletconnect") {
-    provider = new ethers.providers.Web3Provider(walletconnectprovider);
-  }
-
+  provider = new ethers.providers.Web3Provider(window.ethereum);
   const Tokencontract = new ethers.Contract(
     contractaddress,
     FractionTokenABI,
@@ -32,16 +24,10 @@ export const Faucet = () => {
     updateUI();
   });
   async function updateUI() {
-    if (
-      window.localStorage.getItem("signer") !== null ||
-      window.localStorage.getItem("signer") !== "" ||
-      window.localStorage.getItem("address") !== ""
-    ) {
-      const x = await Tokencontract.balanceOf(
-        "0x953f88014255241332d8841C34921572db112D65"
-      );
-      setTokenLeft(Number.parseFloat(x.toString()));
-    }
+    const x = await Tokencontract.balanceOf(
+      "0x953f88014255241332d8841C34921572db112D65"
+    );
+    setTokenLeft(Number.parseFloat(x.toString()));
   }
 
   async function requestFunds() {
