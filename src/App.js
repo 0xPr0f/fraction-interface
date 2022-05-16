@@ -7,24 +7,102 @@ import { Link } from "react-router-dom";
 import { Mint } from "./components/Mint";
 import { Analytics } from "./components/Analytics";
 import { Trade } from "./components/Trade";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-//import { ethers } from "ethers";
+import { ethers } from "ethers";
+import Web3Modal from "web3modal";
+import { providerOptions } from "./utils/providerOptions";
+import { getEllipsisTxt } from "./utils/utils";
 
+const web3Modal = new Web3Modal({
+  cacheProvider: true, // optional
+  providerOptions, // required
+});
 function App() {
+  const [provider, setProvider] = useState();
+  const [library, setLibrary] = useState();
+  const [account, setAccount] = useState();
+  const [signature, setSignature] = useState("");
+  const [error, setError] = useState("");
+  const [chainId, setChainId] = useState();
+  const [network, setNetwork] = useState();
+  const [message, setMessage] = useState("");
+  const [verified, setVerified] = useState();
+
   const [tab, setTab] = useState();
-  //  var modalClose = document.getElementsByClassName("close")[0];
 
-  function displayWalletModal() {
-    document.getElementById("myModal").style.display = "block";
-  }
-  function closeWalletModal() {
-    document.getElementById("myModal").style.display = "none";
-  }
-  /* btn.onclick = function() {
-    modal.style.display = "block";
-  }*/
+  const connectWallet = async () => {
+    try {
+      const provider = await web3Modal.connect();
+      const library = new ethers.providers.Web3Provider(provider);
+      const accounts = await library.listAccounts();
+      const network = await library.getNetwork();
+      window.localStorage.setItem("connected", "true");
+      setProvider(provider);
+      setLibrary(library);
+      if (accounts) setAccount(accounts[0]);
+      setChainId(network.chainId);
+    } catch (error) {
+      setError(error);
+    }
+  };
 
+  const refreshState = () => {
+    setAccount();
+    setChainId();
+    setNetwork("");
+    setMessage("");
+    setSignature("");
+    setVerified(undefined);
+  };
+
+  const disconnect = async () => {
+    web3Modal.clearCachedProvider();
+    window.localStorage.setItem("connected", "false");
+    console.log("nice");
+    refreshState();
+  };
+  /*
+  useEffect(() => {
+    if (web3Modal.cachedProvider) {
+      connectWallet();
+    }
+  }, []);
+*/
+  useEffect(() => {
+    if (provider?.on) {
+      const handleAccountsChanged = (accounts) => {
+        console.log("accountsChanged", accounts);
+        if (accounts) setAccount(accounts[0]);
+      };
+
+      const handleChainChanged = (_hexChainId) => {
+        setChainId(_hexChainId);
+      };
+
+      const handleDisconnect = () => {
+        console.log("disconnect", error);
+        disconnect();
+      };
+
+      provider.on("accountsChanged", handleAccountsChanged);
+      provider.on("chainChanged", handleChainChanged);
+      provider.on("disconnect", handleDisconnect);
+
+      return () => {
+        if (provider.removeListener) {
+          provider.removeListener("accountsChanged", handleAccountsChanged);
+          provider.removeListener("chainChanged", handleChainChanged);
+          provider.removeListener("disconnect", handleDisconnect);
+        }
+      };
+    }
+  }, [provider]);
+  useEffect(() => {
+    if (web3Modal.cachedProvider) {
+      connectWallet();
+    }
+  }, []);
   window.onclick = function (event) {
     if (event.target === document.getElementById("myModal")) {
       document.getElementById("myModal").style.display = "none";
@@ -42,40 +120,6 @@ function App() {
     document.getElementById(`${id}`).style.boxShadow =
       "inset 4px 0 0 0 RGB(3, 99, 255)";
     setTab(id);
-  }
-
-  ///////////////////////////////////////
-
-  /* function displayWalletModalpersonal() {
-    document.getElementById("myModal1").style.display = "block";
-  }*/
-  function closeWalletModalpersonal() {
-    document.getElementById("myModal1").style.display = "none";
-  }
-
-  function secondaryWalletSection() {
-    document.getElementById("metamask").style.display = "none";
-    document.getElementById("walletconnect").style.display = "none";
-    document.getElementById("coinbase").style.display = "none";
-    document.getElementById("unstoppable").style.display = "none";
-  }
-
-  function personalWalletSection(id) {
-    closeWalletModal();
-    secondaryWalletSection();
-    if (id === "1") {
-      document.getElementById("myModal1").style.display = "block";
-      document.getElementById("metamask").style.display = "block";
-    } else if (id === "2") {
-      document.getElementById("myModal1").style.display = "block";
-      document.getElementById("walletconnect").style.display = "block";
-    } else if (id === "3") {
-      document.getElementById("myModal1").style.display = "block";
-      document.getElementById("coinbase").style.display = "block";
-    } else if (id === "4") {
-      document.getElementById("myModal1").style.display = "block";
-      document.getElementById("unstoppable").style.display = "block";
-    }
   }
 
   return (
@@ -116,7 +160,7 @@ function App() {
               </button>
             </Link>
 
-            <Link to="/trade">
+            <Link to="/fraction">
               <button
                 onClick={() => {
                   updateTheme("btn2");
@@ -127,7 +171,7 @@ function App() {
                 <span className="txt">
                   {" "}
                   <FontAwesomeIcon icon="fa-solid fa-scale-balanced" />{" "}
-                  &nbsp;Trade
+                  &nbsp;Fraction
                 </span>
               </button>
             </Link>
@@ -167,354 +211,41 @@ function App() {
               <Route path="/" element={<User />} />
               <Route path="/stake" element={<Stake />} />
               <Route path="/mint" element={<Mint />} />
-              <Route path="/trade" element={<Trade />} />
+              <Route path="/fraction" element={<Trade />} />
               <Route path="/analytics" element={<Analytics />} />
             </Routes>
-            <button
-              onClick={() => {
-                personalWalletSection("2");
-              }}
-            >
-              Test
-            </button>
+            <button onClick={() => {}}>Test</button>
             {/* Connect to wallet primary button */}
             <div className="navbar"></div>
             <div id="loginholder">
+              {window.localStorage.getItem("connected") === "false" ? null : (
+                <button className="login">
+                  <span className="logintxt">{getEllipsisTxt(account)}</span>
+                </button>
+              )}
               <button className="login">
                 <span
                   className="logintxt"
                   onClick={() => {
-                    displayWalletModal();
+                    if (window.localStorage.getItem("connected") === "false") {
+                      connectWallet();
+                    } else {
+                      console.log();
+                      disconnect();
+                      console.log(
+                        network,
+                        window.localStorage.getItem("connected")
+                      );
+                    }
                   }}
                 >
-                  Connect Wallet
+                  {window.localStorage.getItem("connected") === "false"
+                    ? "Connect Wallet"
+                    : "Disconnect"}
                 </span>
               </button>
             </div>
 
-            <div id="myModal" className="modal">
-              <div className="modal-content">
-                <span
-                  onClick={() => {
-                    closeWalletModal();
-                  }}
-                  className="close"
-                >
-                  <FontAwesomeIcon icon="fa-solid fa-xmark" />
-                </span>
-                <p>Connect a wallet</p>
-                <button
-                  className="textcursor"
-                  style={{
-                    fontSize: "16px",
-                  }}
-                >
-                  By connecting a wallet, you agree to Fraction{" "}
-                  <a
-                    className="links"
-                    style={{ color: "blue" }}
-                    target="_about"
-                    href="https://etherscan.io/token/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                  and acknowledge that you have read and understand the Fraction{" "}
-                  <a
-                    className="links"
-                    style={{ color: "blue" }}
-                    target="_about"
-                    href="https://etherscan.io/token/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
-                  >
-                    {" "}
-                    Protocol Disclaimer
-                  </a>
-                  .
-                </button>
-                <div className="wallettypesholder">
-                  <br />
-                  <button
-                    onClick={() => {
-                      personalWalletSection("1");
-                    }}
-                    style={{ textAlign: "left" }}
-                    className="wallet"
-                  >
-                    Metamask
-                    <img
-                      className="walletIcons"
-                      alt=""
-                      width="20px"
-                      height="20px"
-                      src="https://gateway.pinata.cloud/ipfs/QmPgxeRnkq8UGrsxzUEsowBcUnwnQPd7Dia2v19u6atsHa"
-                    />
-                  </button>
-                  <br />
-                  <button
-                    style={{ textAlign: "left" }}
-                    onClick={() => {
-                      personalWalletSection("2");
-                    }}
-                    className="wallet"
-                  >
-                    Wallet connect
-                    <img
-                      className="walletIcons"
-                      alt=""
-                      src="https://gateway.pinata.cloud/ipfs/QmYsEGVGHdWMA4TzKmHz5CcK3HaTf65C7j3WdSMvzSDQBh"
-                    />
-                  </button>
-                  <br />
-                  <button
-                    style={{ textAlign: "left" }}
-                    onClick={() => {
-                      personalWalletSection("3");
-                    }}
-                    className="wallet"
-                  >
-                    Coinbase
-                    <img
-                      alt=""
-                      className="walletIcons"
-                      src="https://gateway.pinata.cloud/ipfs/QmYFeCsLXNz4orNpMAvgTfGp6ubEMjsU9okv6QsCg8V4ef"
-                    />
-                  </button>
-                  <br />
-                  <button
-                    style={{ textAlign: "left" }}
-                    onClick={() => {
-                      personalWalletSection("4");
-                    }}
-                    className="wallet"
-                  >
-                    Unstoppable domains
-                    <img
-                      width="20px"
-                      height="20px"
-                      alt=""
-                      className="walletIcons"
-                      src="https://gateway.pinata.cloud/ipfs/QmVu7eRjS4VTtPzSyD6tiqoJNuRqTdLb81nRQc8kYUx4Z9"
-                    />
-                  </button>
-                  <br />
-                </div>
-              </div>
-            </div>
-
-            <div id="myModal1" className="modalwallet">
-              <div className="modal-contentwallet">
-                <div>
-                  <span
-                    style={{ fontSize: "29px" }}
-                    onClick={() => {
-                      closeWalletModalpersonal();
-                    }}
-                    className="close"
-                  >
-                    <FontAwesomeIcon icon="fa-solid fa-xmark" />
-                  </span>
-                  <span
-                    style={{ fontSize: "29px" }}
-                    onClick={() => {
-                      displayWalletModal();
-                      closeWalletModalpersonal();
-                    }}
-                    className="close1"
-                  >
-                    <FontAwesomeIcon icon="fa-solid fa-arrow-left-long fa-7x" />
-                  </span>
-                  <br />
-                </div>
-                <br />
-                <button
-                  className="textcursor"
-                  style={{
-                    fontSize: "16px",
-                  }}
-                >
-                  <br />
-                  By connecting a wallet, you agree to Fraction{" "}
-                  <a
-                    className="links"
-                    style={{ color: "blue" }}
-                    target="_about"
-                    href="https://etherscan.io/token/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                  and acknowledge that you have read and understand the Fraction{" "}
-                  <a
-                    className="links"
-                    style={{ color: "blue" }}
-                    target="_about"
-                    href="https://etherscan.io/token/0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e"
-                  >
-                    {" "}
-                    Protocol Disclaimer
-                  </a>
-                  .
-                </button>
-                <div className="wallettypesholder">
-                  <br />
-                  <div id="metamask">
-                    <button
-                      id="metamask"
-                      style={{
-                        textAlign: "left",
-                        height: "50px",
-                        cursor: "default",
-                      }}
-                      className="wallet1a"
-                    >
-                      Conecting...
-                    </button>
-                    <br />
-
-                    <button
-                      id="metamask"
-                      style={{
-                        textAlign: "left",
-                        height: "100px",
-                        cursor: "default",
-                        fontSize: "20px",
-                      }}
-                      className="wallet1"
-                    >
-                      Metamask
-                      <img
-                        className="walletIcons"
-                        alt=""
-                        width="40px"
-                        height="40px"
-                        src="https://gateway.pinata.cloud/ipfs/QmPgxeRnkq8UGrsxzUEsowBcUnwnQPd7Dia2v19u6atsHa"
-                      />
-                      <br />
-                      <span style={{ fontSize: "10px" }}>
-                        {" "}
-                        Simple and Easy-to-use broswer extension
-                      </span>
-                    </button>
-                  </div>
-
-                  <div id="walletconnect">
-                    <button
-                      id="walletconnect"
-                      style={{
-                        textAlign: "left",
-                        height: "50px",
-                        cursor: "default",
-                      }}
-                      className="wallet1a"
-                    >
-                      Connecting...
-                    </button>
-                    <br />
-                    <button
-                      id="walletconnect"
-                      style={{
-                        textAlign: "left",
-                        height: "100px",
-                        cursor: "default",
-                        fontSize: "20px",
-                      }}
-                      className="wallet1"
-                    >
-                      Wallet connect
-                      <img
-                        width="40px"
-                        height="40px"
-                        className="walletIcons"
-                        alt=""
-                        src="https://gateway.pinata.cloud/ipfs/QmYsEGVGHdWMA4TzKmHz5CcK3HaTf65C7j3WdSMvzSDQBh"
-                      />
-                      <br />
-                      <span style={{ fontSize: "10px" }}>
-                        {" "}
-                        Connect to Trust Wallet, Rainbow Wallet and more...
-                      </span>
-                    </button>
-                  </div>
-
-                  <br />
-                  <div id="coinbase">
-                    <button
-                      id="coinbase"
-                      style={{
-                        textAlign: "left",
-                        height: "50px",
-                        cursor: "default",
-                      }}
-                      className="wallet1a"
-                    >
-                      Connecting...
-                    </button>
-                    <br />
-                    <button
-                      id="coinbase"
-                      style={{
-                        textAlign: "left",
-                        height: "100px",
-                        cursor: "default",
-                        fontSize: "20px",
-                      }}
-                      className="wallet1"
-                    >
-                      Coinbase
-                      <img
-                        alt=""
-                        width="40px"
-                        height="40px"
-                        className="walletIcons"
-                        src="https://gateway.pinata.cloud/ipfs/QmYFeCsLXNz4orNpMAvgTfGp6ubEMjsU9okv6QsCg8V4ef"
-                      />
-                      <br />
-                      <span style={{ fontSize: "10px" }}>
-                        {" "}
-                        Use Coinbase Wallet app on mobile devices
-                      </span>
-                    </button>
-                  </div>
-                  <div id="unstoppable">
-                    <button
-                      id="unstoppable"
-                      style={{
-                        textAlign: "left",
-                        height: "50px",
-                        cursor: "default",
-                      }}
-                      className="wallet1a"
-                    >
-                      connecting...
-                    </button>
-                    <br />
-                    <button
-                      id="unstoppable"
-                      style={{
-                        textAlign: "left",
-                        height: "100px",
-                        cursor: "default",
-                        fontSize: "20px",
-                      }}
-                      className="wallet1"
-                    >
-                      Unstoppable domains
-                      <img
-                        width="40px"
-                        height="40px"
-                        alt=""
-                        className="walletIcons"
-                        src="https://gateway.pinata.cloud/ipfs/QmVu7eRjS4VTtPzSyD6tiqoJNuRqTdLb81nRQc8kYUx4Z9"
-                      />
-                      <br />
-                      <span style={{ fontSize: "10px" }}>
-                        {" "}
-                        Connect to your Crypto NFT domain.
-                      </span>
-                    </button>
-                    <br />
-                  </div>
-                </div>
-              </div>
-            </div>
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
