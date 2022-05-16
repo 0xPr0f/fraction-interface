@@ -1,11 +1,13 @@
 import React from "react";
 import { useState } from "react";
+import { ethers } from "ethers";
+import { FractionWrapperABI } from "../utils/FractionWrapper";
 export const Stake = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
-  const [tokeninwallet, settokeninwallet] = useState(20);
-  const [tokenstaked, settokenStaked] = useState(20);
+  const [tokeninwallet, settokeninwallet] = useState("");
+  const [tokenstaked, settokenStaked] = useState("");
   function stake() {
     console.log("staking");
   }
@@ -18,6 +20,15 @@ export const Stake = () => {
     }
     setStaketype(type);
   }
+  const contractaddress = "";
+  var provider;
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  const Tokencontract = new ethers.Contract(
+    contractaddress,
+    FractionWrapperABI,
+    provider.getSigner()
+  );
+
   return (
     <div>
       <br />

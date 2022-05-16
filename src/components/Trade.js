@@ -3,14 +3,14 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { ERC20ABI } from "../utils/ERC20";
 import { FractionWrapperABI } from "../utils/FractionWrapper";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 
 export const Trade = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(
+    " 0x953f88014255241332d8841C34921572db112D65"
+  );
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
-  const [tokeninwallet, settokeninwallet] = useState();
   const [tokenstaked, settokenStaked] = useState();
   var provider;
   //const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -25,7 +25,7 @@ export const Trade = () => {
     setStaketype(type);
   }
 
-  const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
+  const contractaddress = "";
 
   provider = new ethers.providers.Web3Provider(window.ethereum);
   const Tokencontract = new ethers.Contract(
@@ -134,10 +134,7 @@ export const Trade = () => {
                       fontSize: "14px",
                       float: "left",
                     }}
-                  >
-                    <br /> FRACT Token Address :
-                    0x953f88014255241332d8841C34921572db112D65
-                  </span>
+                  ></span>
                   <br />
                   <div>
                     <input
