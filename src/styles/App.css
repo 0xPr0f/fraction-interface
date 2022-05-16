@@ -373,6 +373,14 @@ background-color: #efefef;
 #block:hover{
   color: #25AE61;
 }
+
+.block {
+  cursor: pointer;
+  position: fixed;
+  margin: 20px;
+  bottom: 0;
+  right: 2;
+}
 .tryagain:hover{
   cursor: pointer;
 }

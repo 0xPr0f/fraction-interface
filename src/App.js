@@ -209,11 +209,11 @@ function App() {
   /////////// Connecting to wallets code ////////////////////
   /////////// Connecting to wallets code ////////////////////
   /////////// Connecting to wallets code ////////////////////
-
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   async function connectWithMetamask() {
     try {
       setConnectionStatus(true);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
       await provider.send("eth_requestAccounts", []);
 
       const signer = provider.getSigner();
@@ -224,6 +224,7 @@ function App() {
       setSigner(signer);
       setIsConnected(true);
       window.localStorage.setItem("signer", stringify(signer));
+      window.localStorage.setItem("connection", "metamask");
       window.localStorage.setItem("isConnected", true);
       window.localStorage.setItem(
         "chainid",
@@ -254,12 +255,14 @@ function App() {
       // window.localStorage.setItem("signer", JSON.stringify(signer));
       setSigner(signer);
       window.localStorage.setItem("address", await signer.getAddress());
+
       window.localStorage.setItem("signer", stringify(signer));
       window.localStorage.setItem(
         "chainid",
         JSON.stringify((await provider.getNetwork()).chainId)
       );
       setIsConnected(true);
+      window.localStorage.setItem("connection", "walletconnect");
       window.localStorage.setItem("isConnected", true);
       console.log(Signer);
       document.getElementById("myModal1").style.display = "none";
@@ -294,6 +297,7 @@ function App() {
       setIsConnected(true);
       setAddress(await signer.getAddress());
       window.localStorage.setItem("address", await signer.getAddress());
+      window.localStorage.setItem("connection", "coinbase");
       window.localStorage.setItem("signer", stringify(signer));
       window.localStorage.setItem(
         "chainid",
@@ -315,6 +319,7 @@ function App() {
   async function logoutWallet() {
     setConnectionStatus(true);
     if (WalletCount === 1) {
+      console.log(window.ethereum);
     } else if (WalletCount === 2) {
       await walletconnectprovider.disconnect();
     } else if (WalletCount === 3) {
@@ -461,13 +466,6 @@ function App() {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/faucet" element={<Faucet />} />
             </Routes>
-            <button
-              onClick={() => {
-                personalWalletSection("2");
-              }}
-            >
-              Test
-            </button>
             {/* Connect to wallet primary button */}
             <div className="navbar"></div>
             <div id="loginholder">
@@ -990,6 +988,11 @@ function App() {
 
             {/*Add extra stuff here below */}
             {/*end of add extra stuff here below */}
+            <div className="block">
+              {" "}
+              Made by 0xpr0f for the HackMoney Hackathon 2022 : Alpha test
+              version
+            </div>
             <div style={{ fontSize: "13px" }} id="block">
               <span>{block}</span>
               &nbsp;

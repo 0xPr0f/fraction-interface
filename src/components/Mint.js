@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/Mint.css";
-import { providers } from "ethers";
+import { ethers } from "ethers";
+import { FractionNFTABI } from "../utils/FractionNFT";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 //import { NFTStorage, File } from "nft.storage";
 
 export const Mint = () => {
@@ -9,6 +11,23 @@ export const Mint = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState([]);
+
+  const contractaddress = "";
+  var provider;
+
+  const walletconnectprovider = new WalletConnectProvider({
+    infuraId: "5843244e30ef4b68b2a0cede1813a327",
+  });
+  if (window.localStorage.getItem("connection") !== "metamask") {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+  } else if (window.localStorage.getItem("connection") === "walletconnect") {
+    provider = new ethers.providers.Web3Provider(walletconnectprovider);
+  }
+  const NFTcontract = new ethers.Contract(
+    contractaddress,
+    FractionNFTABI,
+    provider.getSigner()
+  );
 
   async function storeNFT() {
     // create a new NFTStorage client using our API key

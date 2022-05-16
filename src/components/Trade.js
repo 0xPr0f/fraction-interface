@@ -1,12 +1,15 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { ERC20ABI } from "../utils/ERC20";
 
 export const Trade = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
-  const [tokeninwallet, settokeninwallet] = useState(20);
-  const [tokenstaked, settokenStaked] = useState(20);
+  const [tokeninwallet, settokeninwallet] = useState();
+  const [tokenstaked, settokenStaked] = useState();
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   function stake() {
     console.log("staking");
   }
@@ -19,6 +22,38 @@ export const Trade = () => {
     }
     setStaketype(type);
   }
+  /*
+  const contractaddress = "";
+ 
+  const Tokencontract = new ethers.Contract(
+    contractaddress,
+    [],
+    provider.getSigner()
+  );
+
+  useEffect(() => {
+    updateUI();
+  });
+  async function updateUI() {
+    if (
+      window.localStorage.getItem("signer") !== null ||
+      window.localStorage.getItem("signer") !== ""
+    ) {
+      const x = await Tokencontract.balanceOf(
+        window.localStorage.getItem("address")
+      );
+      settokeninwallet(Number.parseFloat(x.toString()));
+    }
+  }
+*/
+  const ERC20 = new ethers.Contract(
+    "0xb64845d53a373d35160b72492818f0d2f51292c0",
+    ERC20ABI,
+    provider.getSigner()
+  );
+
+  async function approveERCbeforeTransfer() {}
+
   return (
     <div>
       <br />
@@ -126,7 +161,7 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    FRACT tokens in wallet : {tokeninwallet} FRACT
+                    FRACT tokens : {tokeninwallet} FRACT
                   </span>
                   <br />
                   <div>

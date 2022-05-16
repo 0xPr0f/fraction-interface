@@ -2,32 +2,52 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { FractionTokenABI } from "../utils/Fraction Token";
 import "../styles/Faucet.css";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
 export const Faucet = () => {
+  const APP_NAME = "Fraction Protocol";
+  const APP_LOGO_URL = "https://example.com/logo.png";
   const [address, setAddress] = useState("");
   const [tokenLeft, setTokenLeft] = useState("");
+  var provider;
   const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  const walletconnectprovider = new WalletConnectProvider({
+    infuraId: "5843244e30ef4b68b2a0cede1813a327",
+  });
+  if (window.localStorage.getItem("connection") !== "metamask") {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+  } else if (window.localStorage.getItem("connection") === "walletconnect") {
+    provider = new ethers.providers.Web3Provider(walletconnectprovider);
+  }
+
   const Tokencontract = new ethers.Contract(
     contractaddress,
     FractionTokenABI,
-    provider
+    provider.getSigner()
   );
 
   useEffect(() => {
     updateUI();
-    console.log(parse(window.localStorage.getItem("signer")));
   });
   async function updateUI() {
     if (
       window.localStorage.getItem("signer") !== null ||
-      window.localStorage.getItem("signer") !== ""
+      window.localStorage.getItem("signer") !== "" ||
+      window.localStorage.getItem("address") !== ""
     ) {
       const x = await Tokencontract.balanceOf(
         "0x953f88014255241332d8841C34921572db112D65"
       );
-      console.log(x);
+      setTokenLeft(Number.parseFloat(x.toString()));
     }
+  }
+
+  async function requestFunds() {
+    console.log(address);
+    const tx = await Tokencontract.Faucetmint(address);
+    await tx.wait();
   }
   return (
     <div>
@@ -49,7 +69,7 @@ export const Faucet = () => {
                 float: "left",
               }}
             >
-              Tokens left in Faucet : {tokenLeft} FRACT
+              Tokens in Faucet : {tokenLeft / 10 ** 18} FRACT
             </span>
             <br />
             <div>
@@ -78,7 +98,7 @@ export const Faucet = () => {
             <div className="buttonCard">
               <button
                 onClick={() => {
-                  login();
+                  requestFunds();
                 }}
                 className="buttonstandardFaucet"
               >
