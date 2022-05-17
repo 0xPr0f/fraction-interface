@@ -39,7 +39,7 @@ function App() {
   const [chain, setChain] = useState();
   const [block, setBlock] = useState();
   window.onload = function () {
-    location.href = "https://frac-tion.vercel.app/";
+    window.location.href = "https://frac-tion.vercel.app/";
   };
   useEffect(() => {
     const connected = window.localStorage.getItem("isConnected") === "true";
