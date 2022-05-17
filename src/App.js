@@ -15,6 +15,7 @@ import { providerOptions } from "./utils/providerOptions";
 import { getEllipsisTxt } from "./utils/utils";
 import { Faucet } from "./components/Faucet";
 import { getBlockHeight } from "./utils/covalentDataPool";
+import { redirect } from "./utils/utils";
 
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
@@ -276,7 +277,13 @@ function App() {
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
-            <div style={{ fontSize: "13px" }} id="block">
+            <div
+              onClick={() => {
+                redirect(`https://mumbai.polygonscan.com/block/${block}`);
+              }}
+              style={{ fontSize: "13px" }}
+              id="block"
+            >
               <span>{block}</span>
               &nbsp;
               <FontAwesomeIcon

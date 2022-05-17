@@ -14,3 +14,7 @@ export const getEllipsisTxt = (str, n = 6) => {
   }
   return "";
 };
+
+export const redirect = (url) => {
+  window.open(url, "_blank");
+};

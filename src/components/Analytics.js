@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../styles/Analytics.css";
+import { getTokenHolders } from "../utils/covalentDataPool";
 
 export const Analytics = () => {
   const [chaintype, setchaintype] = useState("");
+  const [tokenholders, setTokenholders] = useState("");
+
+  useEffect(() => {
+    loadCovalentData();
+  });
+  async function loadCovalentData() {
+    setTokenholders(
+      await getTokenHolders(
+        "0x953f88014255241332d8841c34921572db112d65",
+        "80001"
+      )
+    );
+  }
   function Chaintype(type) {
     if (chaintype === type) {
       setchaintype("3");
@@ -124,7 +138,7 @@ export const Analytics = () => {
                       marginRight: "600px",
                     }}
                   >
-                    Fraction Token
+                    Fraction&nbsp;Token
                   </span>
                 </div>
                 <div className="grid-container">
@@ -162,7 +176,7 @@ export const Analytics = () => {
                       Decimal
                       <br />
                     </span>
-                    3
+                    18
                   </div>
                   <div className="grid-item">
                     {" "}
@@ -186,7 +200,7 @@ export const Analytics = () => {
                       marginRight: "600px",
                     }}
                   >
-                    Fraction NFT
+                    Fraction&nbsp;NFT
                   </span>
                 </div>
                 <div className="grid-container">
@@ -325,7 +339,7 @@ export const Analytics = () => {
                       marginRight: "600px",
                     }}
                   >
-                    Fraction Token
+                    Fraction&nbsp;Token
                   </span>
                 </div>
                 <div className="grid-container">
@@ -351,7 +365,7 @@ export const Analytics = () => {
                       Total Holders
                       <br />
                     </span>
-                    2
+                    {tokenholders}
                   </div>
                   <div className="grid-item">
                     {" "}
@@ -363,7 +377,7 @@ export const Analytics = () => {
                       Decimal
                       <br />
                     </span>
-                    3
+                    18
                   </div>
                   <div className="grid-item">
                     {" "}
@@ -413,7 +427,7 @@ export const Analytics = () => {
                       marginRight: "600px",
                     }}
                   >
-                    Fraction NFT
+                    Fraction&nbsp;NFT
                   </span>
                 </div>
                 <div className="grid-container">
