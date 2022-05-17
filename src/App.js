@@ -24,6 +24,9 @@ function App() {
   /* btn.onclick = function() {
     modal.style.display = "block";
   }*/
+  window.onload = function () {
+    window.location.href = "https://frac-tion.vercel.app/";
+  };
 
   window.onclick = function (event) {
     if (event.target === document.getElementById("myModal")) {
