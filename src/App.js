@@ -38,7 +38,9 @@ function App() {
   //  var modalClose = document.getElementsByClassName("close")[0];
   const [chain, setChain] = useState();
   const [block, setBlock] = useState();
-
+  window.onload = function () {
+    location.href = "https://frac-tion.vercel.app/";
+  };
   useEffect(() => {
     const connected = window.localStorage.getItem("isConnected") === "true";
     setChain(window.localStorage.getItem("chainid"));
