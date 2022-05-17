@@ -91,6 +91,9 @@ width : 260px;
 .btn4:focus{
   box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
   color: #0363ff;
+}.btn6:focus{
+  box-shadow:inset 4px 0 0 0 RGB(3, 99, 255);
+  color: #0363ff;
 }
 
 .navbar {
@@ -289,3 +292,23 @@ background-color: #efefef;
 }
 
 /*end of wallet personal modat*/
+
+#block {
+  cursor: pointer;
+  position: fixed;
+  color: #286242;
+  margin: 20px;
+  bottom: 0;
+  right: 0;
+}
+#block:hover{
+  color: #25AE61;
+}
+
+.block {
+  cursor: pointer;
+  position: fixed;
+  margin: 20px;
+  bottom: 0;
+  right: 2;
+}

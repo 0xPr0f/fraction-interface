@@ -13,13 +13,16 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import { providerOptions } from "./utils/providerOptions";
 import { getEllipsisTxt } from "./utils/utils";
+import { Faucet } from "./components/Faucet";
+import { getBlockHeight } from "./utils/covalentDataPool";
 
-const web3Modal = new Web3Modal({
+export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
 });
 function App() {
   const [provider, setProvider] = useState();
+  const [block, setblock] = useState("");
   const [library, setLibrary] = useState();
   const [account, setAccount] = useState();
   const [signature, setSignature] = useState("");
@@ -69,6 +72,12 @@ function App() {
     }
   }, []);
 */
+  useEffect(() => {
+    loadStuff();
+  });
+  async function loadStuff() {
+    setblock(await getBlockHeight(80001));
+  }
   useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts) => {
@@ -204,6 +213,20 @@ function App() {
                 </span>
               </button>
             </Link>
+            <Link to="/faucet">
+              <button
+                onClick={() => {
+                  updateTheme("btn6");
+                }}
+                className="btn btn6"
+                id="btn6"
+              >
+                <span className="txt">
+                  <FontAwesomeIcon icon="fa-solid fa-faucet-drip" />{" "}
+                  &nbsp;Faucet
+                </span>
+              </button>
+            </Link>
           </div>
 
           <div id="main" className="main App">
@@ -213,11 +236,15 @@ function App() {
               <Route path="/mint" element={<Mint />} />
               <Route path="/fraction" element={<Trade />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/faucet" element={<Faucet />} />
             </Routes>
             <button onClick={() => {}}>Test</button>
             {/* Connect to wallet primary button */}
-            <div className="navbar"></div>
+
             <div id="loginholder">
+              <button className="login">
+                <span className="logintxt">Dropdown</span>
+              </button>
               {window.localStorage.getItem("connected") === "false" ? null : (
                 <button className="login">
                   <span className="logintxt">{getEllipsisTxt(account)}</span>
@@ -249,6 +276,19 @@ function App() {
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
+            <div style={{ fontSize: "13px" }} id="block">
+              <span>{block}</span>
+              &nbsp;
+              <FontAwesomeIcon
+                style={{
+                  color: "rgb(37,174,97)",
+                  marginBottom: "3px",
+                  width: "7px",
+                  height: "7px",
+                }}
+                icon="fa-solid fa-circle"
+              />
+            </div>
           </div>
         </div>
       </Router>

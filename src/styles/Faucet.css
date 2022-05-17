@@ -1,0 +1,37 @@
+.buttonstandardFaucet {
+    padding: 10px;
+    border-radius: 20px;
+    border-width: 0px;
+    color: white;
+    background-image: linear-gradient(90deg, #0364ff, #1ac7fe);
+    width: 100px;
+    cursor: pointer;
+  }
+
+  .buttonCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .pagebox {
+    margin: auto;
+    width: 500px;
+    min-height: 250px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+  }
+  .inputFaucet {
+    padding: 10px;
+    width: 370px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  
+  
