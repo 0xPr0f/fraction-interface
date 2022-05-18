@@ -4,17 +4,17 @@ import { ethers } from "ethers";
 import { web3Modal } from "../App";
 import { FractionTokenABI } from "../abis/FractionTokenABI ";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
+import { FractionlessWrapperAddress, FractTokenAddress } from "../utils/utils";
 
 export const Trade = () => {
   const [unwrapamount, setUnwrapAmount] = useState("");
   const [addressToken, setAddressToken] = useState(
     "0x953f88014255241332d8841C34921572db112D65"
   );
+  const [allowance, setAllowance] = useState();
   const [wrapamount, setWrapAmount] = useState("");
   const [wraptype, setWraptype] = useState("");
   const [tokenWrapped, settokenWrapped] = useState();
-  var provider;
-  //const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   function Minttype(type) {
     if (type === "1") {
@@ -26,8 +26,7 @@ export const Trade = () => {
     setWraptype(type);
   }
 
-  const contractaddress = "";
-  var NFTcontract;
+  var FractionlessWrapperContract;
   var Tokencontract;
   useEffect(() => {
     loadContract();
@@ -37,28 +36,45 @@ export const Trade = () => {
     if (window.localStorage.getItem("connected") !== "false") {
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
-      NFTcontract = new ethers.Contract(
-        contractaddress,
+      FractionlessWrapperContract = new ethers.Contract(
+        FractionlessWrapperAddress,
         FractionWrapperABI,
         library.getSigner()
       );
       Tokencontract = new ethers.Contract(
-        "0xb64845d53a373d35160b72492818f0d2f51292c0",
+        FractTokenAddress,
         FractionTokenABI,
         library.getSigner()
       );
+      console.log(await library.getSigner().getAddress());
+      /*
+      const allow = await FractTokenAddress.allowance(
+        await library.getSigner().getAddress(),
+        FractionlessWrapperAddress
+      );
+      console.log(allow);
+      setAllowance(allow);
+      */
     }
   }
-  function wrap() {
-    // Tokencontract;
-    console.log(wrapamount, addressToken);
-  }
-  function unwrap() {
-    // Tokencontract;
-    console.log(unwrapamount, addressToken);
+
+  async function approveERCbeforeTransfer() {
+    Tokencontract.approve(FractionlessWrapperAddress, 10 ** 35);
   }
 
-  async function approveERCbeforeTransfer() {}
+  async function wrap() {
+    const tx = await FractionlessWrapperContract.wrap(wrapamount, addressToken);
+    await tx.wait();
+    console.log(wrapamount, addressToken);
+  }
+  async function unwrap() {
+    const tx = await FractionlessWrapperContract.unwrap(
+      unwrapamount,
+      addressToken
+    );
+    await tx.wait();
+    console.log(unwrapamount, addressToken);
+  }
 
   return (
     <div>
@@ -151,9 +167,7 @@ export const Trade = () => {
                       className="inputFaucet"
                       placeholder="Token Address"
                       value={addressToken}
-                      onChange={(e) => {
-                        setAddressToken(e.target.value);
-                      }}
+                      onChange={(e) => {}}
                     />
                   </div>
                   <span
@@ -163,7 +177,17 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    Wrappable Tokens in wallet : {tokenWrapped} FRACT
+                    Wrappable Tokens in wallet : {tokenWrapped}
+                  </span>
+                  <br />
+                  <span
+                    style={{
+                      // marginTop: "0px",
+                      fontSize: "14px",
+                      float: "left",
+                    }}
+                  >
+                    FRACT Contract allowance : {allowance}
                   </span>
                   <br />
                   <div>
@@ -178,19 +202,41 @@ export const Trade = () => {
                       }}
                     />
                   </div>
-                  <div style={{ float: "left" }}>Stake Rewards : {}</div>
+                  <div style={{ float: "left" }}>
+                    Wrap Rewards : {wrapamount} x 100,000 + 1 ={" "}
+                    {wrapamount * 100000 + 1}
+                  </div>
                   <br />
+                  <br />
+                  <div style={{ float: "left" }}>
+                    Stream : {wrapamount * (100000 + 1) * 60 * 60 * 24} wei/day
+                  </div>
                 </div>
                 <br />
                 <br />
+                {allowance < wrapamount ? (
+                  <div style={{ marginBottom: "3px" }} className="buttonCard">
+                    <button
+                      style={{ fontSize: "15px", height: "50px" }}
+                      onClick={() => {
+                        approveERCbeforeTransfer();
+                      }}
+                      className="buttonstandard"
+                    >
+                      Allow the Fraction Protocol to uses your FRACT
+                    </button>
+                  </div>
+                ) : null}
                 <div className="buttonCard">
-                  <button
-                    style={{ fontSize: "22px", height: "45px" }}
-                    onClick={wrap}
-                    className="buttonstandard"
-                  >
-                    WRAP
-                  </button>
+                  {allowance >= wrapamount ? (
+                    <button
+                      style={{ fontSize: "22px", height: "45px" }}
+                      onClick={wrap}
+                      className="buttonstandard"
+                    >
+                      WRAP
+                    </button>
+                  ) : null}
                 </div>
               </>
             )}

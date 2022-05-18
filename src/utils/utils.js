@@ -18,3 +18,10 @@ export const getEllipsisTxt = (str, n = 6) => {
 export const redirect = (url) => {
   window.open(url, "_blank");
 };
+
+export const FractxTokenAddress = "";
+export const FractTokenAddress = "";
+export const FractionlessAddress = "";
+export const FractionlessWrapperAddress = "";
+export const FractionNFTAddress = "";
+export const NFTRegistryAddress = "";

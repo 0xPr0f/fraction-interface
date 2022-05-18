@@ -2,21 +2,38 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "../styles/Analytics.css";
 import { getTokenHolders } from "../utils/covalentDataPool";
+import { getTokenBalance } from "../utils/covalentDataPool";
+import { getNFTholders } from "../utils/covalentDataPool";
+import {
+  FractionlessWrapperAddress,
+  FractionNFTAddress,
+  FractTokenAddress,
+  FractxTokenAddress,
+} from "../utils/utils";
 
 export const Analytics = () => {
   const [chaintype, setchaintype] = useState("");
   const [tokenholders, setTokenholders] = useState("");
-
+  const [FractTokenBalance, setFractTokenBalance] = useState("");
+  const [FractxTokenBalance, setFractxTokenBalance] = useState("");
+  const [nftholders, setnftHolders] = useState("");
   useEffect(() => {
     loadCovalentData();
   });
   async function loadCovalentData() {
-    setTokenholders(
-      await getTokenHolders(
-        "0x953f88014255241332d8841c34921572db112d65",
-        "80001"
+    /* setTokenholders(await getTokenHolders(FractTokenAddress, "80001"));
+
+    setFractTokenBalance(
+      await getTokenBalance(FractTokenAddress, "80001", FractTokenAddress)
+    );
+    setFractxTokenBalance(
+      await getTokenBalance(
+        FractionlessWrapperAddress,
+        "80001",
+        FractxTokenAddress
       )
     );
+    setnftHolders(await getTokenHolders(FractionNFTAddress, "80001"));*/
   }
   function Chaintype(type) {
     if (chaintype === type) {
@@ -126,7 +143,7 @@ export const Analytics = () => {
                       Total FRACT Token Reserve
                       <br />
                     </span>
-                    4
+                    {FractTokenBalance}
                   </div>
                 </div>
                 <br />
@@ -214,7 +231,7 @@ export const Analytics = () => {
                       NFT holders
                       <br />
                     </span>
-                    1
+                    {nftholders}
                   </div>
                   <div className="grid-item">
                     {" "}
@@ -316,7 +333,9 @@ export const Analytics = () => {
                       Total FRACTx Token Reserve
                       <br />
                     </span>
-                    4
+                    <span style={{ fontSize: "23px" }}>
+                      {FractxTokenBalance / 10 ** 18} FRACTx{" "}
+                    </span>
                   </div>
                   <div className="grid-item">
                     <span
@@ -327,7 +346,9 @@ export const Analytics = () => {
                       Total FRACT Token Reserve
                       <br />
                     </span>
-                    4
+                    <span style={{ fontSize: "23px" }}>
+                      {FractTokenBalance / 10 ** 18} FRACT
+                    </span>
                   </div>
                 </div>
                 <br />
@@ -365,7 +386,7 @@ export const Analytics = () => {
                       Total Holders
                       <br />
                     </span>
-                    {tokenholders}
+                    {tokenholders} Addresses
                   </div>
                   <div className="grid-item">
                     {" "}
@@ -441,7 +462,7 @@ export const Analytics = () => {
                       NFT holders
                       <br />
                     </span>
-                    1
+                    {nftholders}
                   </div>
                   <div className="grid-item">
                     {" "}

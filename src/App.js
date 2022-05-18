@@ -32,9 +32,9 @@ function App() {
   const [network, setNetwork] = useState();
   const [message, setMessage] = useState("");
   const [verified, setVerified] = useState();
+  const [barposition, setBarposition] = useState();
 
   const [tab, setTab] = useState();
-
   const connectWallet = async () => {
     try {
       const provider = await web3Modal.connect();
@@ -131,12 +131,43 @@ function App() {
       "inset 4px 0 0 0 RGB(3, 99, 255)";
     setTab(id);
   }
-
+  useEffect(() => {
+    setBarposition(window.localStorage.getItem("sidebar"));
+  });
+  function closeNav() {
+    if (window.localStorage.getItem("sidebar") !== "closed") {
+      document.getElementById("mySidenav").style.width = "100px";
+      document.getElementById("main").style.marginLeft = "50px";
+      window.localStorage.setItem("sidebar", "closed");
+      setBarposition(window.localStorage.getItem("sidebar"));
+      console.log("pull");
+    } else {
+      document.getElementById("mySidenav").style.width = "260px";
+      document.getElementById("main").style.marginLeft = "260px";
+      window.localStorage.setItem("sidebar", "open");
+      setBarposition(window.localStorage.getItem("sidebar"));
+      console.log("push");
+    }
+    // document.getElementById("mySidenav").style.display = "none";
+  }
   return (
-    <div>
+    <div id="mainog">
       <Router>
         <div>
           <div id="mySidenav" className="sidenav">
+            <span
+              style={{ fontSize: "35px", marginLeft: "50px" }}
+              onClick={() => {
+                closeNav();
+              }}
+              className="close1"
+            >
+              {barposition === "open" ? (
+                <FontAwesomeIcon icon="fa-solid fa-arrow-left-long fa-7x" />
+              ) : (
+                <FontAwesomeIcon icon="fa-solid fa-arrow-right-long fa-7x" />
+              )}
+            </span>
             <br />
             <br />
             <br />
@@ -155,7 +186,7 @@ function App() {
                 </span>
               </button>
             </Link>
-
+            <br />
             <Link to="/mint">
               <button
                 onClick={() => {

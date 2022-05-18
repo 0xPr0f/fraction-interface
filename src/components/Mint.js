@@ -3,18 +3,19 @@ import "../styles/Mint.css";
 import { ethers } from "ethers";
 import { FractionNFTABI } from "../abis/FractionNFTABI";
 import { web3Modal } from "../App";
-//import { NFTStorage, File } from "nft.storage";
+import { create as ipfsHttpClient } from "ipfs-http-client";
+import { NFTRegistryABI } from "../abis/NFTRegistryABI";
+import { NFTRegistryAddress } from "../utils/utils";
+const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 export const Mint = () => {
-  const NFT_STORAGE_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQwNDRjNDhkN2U5M0RkQjlhODA5MTQ1MzlEQWZiNjg4RWIyNzI4NDEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MjczNjUzMTA1NSwibmFtZSI6IkZyYWN0aW9uIn0.ZOS37Ide4XE-1pp_W6V89IPpIVI-iNqYtaIGqRs9sa4";
   const [minttype, setMintype] = useState("");
+  const [fileUrl, setFileUrl] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState([]);
 
   const contractaddress = "";
-  var NFTcontract;
+  var NFTRegistry;
   useEffect(() => {
     loadContract();
   });
@@ -23,43 +24,55 @@ export const Mint = () => {
     if (window.localStorage.getItem("connected") !== "false") {
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
-      NFTcontract = new ethers.Contract(
-        contractaddress,
-        FractionNFTABI,
+      NFTRegistry = new ethers.Contract(
+        NFTRegistryAddress,
+        NFTRegistryABI,
         library.getSigner()
       );
     }
   }
 
-  async function storeNFT() {
-    // create a new NFTStorage client using our API key
-    // const nftstorage = new NFTStorage({ token: NFT_STORAGE_KEY });
-    // call client.store, passing in the image & metadata
-    /* return nftstorage.store({
-      image,
-      name,
-      description,
-
-    }); */
-  }
-
   async function onChange(e) {
     const file = e.target.files[0];
     try {
-      /*  const added = await client.add(file, {
+      const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
-      }); */
-      // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      // setImage(url);
+      });
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      console.log(url);
+      setFileUrl(url);
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
   }
 
   async function mint() {
+    if (!name || !description || !fileUrl) return;
     console.log("mint with custom");
+    console.log(name + " was created");
+    const data = JSON.stringify({
+      name,
+      description,
+      image: fileUrl,
+    });
+    try {
+      const added = await client.add(data);
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const tx = await NFTRegistry.setName(name, url, {
+        value: ethers.utils.parseEther("0.3"),
+      });
+      await tx.wait();
+      console.log("mint with normal");
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
   }
-  function mintdefault() {
+  async function mintdefault() {
+    if (!name) return;
+    const tx = await NFTRegistry.setName(name, "", {
+      value: ethers.utils.parseEther("0.3"),
+    });
+    await tx.wait;
     console.log("mint with defualt");
   }
   function Minttype(type) {
@@ -130,16 +143,11 @@ export const Mint = () => {
                       }}
                     />
                     <h5>Image</h5>
-                    <img src={image} alt="" />
+                    <img alt="" width="400" height="320" src={fileUrl} />
 
                     <label htmlFor="upload-photo">Browse...</label>
                     <br />
-                    <input
-                      type="file"
-                      id="upload-photo"
-                      placeholder="An nft to showcase my fraction"
-                      onClick={onChange}
-                    />
+                    <input type="file" id="upload-photo" onChange={onChange} />
                     <br />
                   </div>
                 </div>

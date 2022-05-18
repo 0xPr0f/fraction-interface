@@ -9,33 +9,6 @@ export const Faucet = () => {
   const [tokenLeft, setTokenLeft] = useState("");
   const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
   var Tokencontract;
-  /*
-  var provider;
- 
-
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-  const Tokencontract = new ethers.Contract(
-    contractaddress,
-    FractionTokenABI,
-    provider.getSigner()
-  );
-
-  useEffect(() => {
-    updateUI();
-  });
-  async function updateUI() {
-    const x = await Tokencontract.balanceOf(
-      "0x953f88014255241332d8841C34921572db112D65"
-    );
-    setTokenLeft(Number.parseFloat(x.toString()));
-  }
-
-  async function requestFunds() {
-    console.log(address);
-    const tx = await Tokencontract.Faucetmint(address);
-    await tx.wait();
-  }
-  */
   useEffect(() => {
     loadContract();
   });

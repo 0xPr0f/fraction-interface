@@ -3,15 +3,21 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
 import { web3Modal } from "../App";
+import {
+  FractionlessAddress,
+  FractionlessWrapperAddress,
+} from "../utils/utils";
+import { FractionlessABI } from "../abis/FractionlessABI";
 export const Stake = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
   const [tokeninwallet, settokeninwallet] = useState("");
   const [tokenstaked, settokenStaked] = useState("");
+  const [approved, setApproved] = useState(";");
 
-  const contractaddress = "";
-  var Wrappercontract;
+  var FractionlessWrapperContract;
+  var FractionlessContract;
 
   function Minttype(type) {
     if (type === "1") {
@@ -30,19 +36,38 @@ export const Stake = () => {
     if (window.localStorage.getItem("connected") !== "false") {
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
-      Wrappercontract = new ethers.Contract(
-        contractaddress,
+      FractionlessWrapperContract = new ethers.Contract(
+        FractionlessWrapperAddress,
         FractionWrapperABI,
         library.getSigner()
       );
+      FractionlessContract = new ethers.Contract(
+        FractionlessAddress,
+        FractionlessABI,
+        library.getSigner()
+      );
+      /*
+      const appr = await FractionlessContract.isApprovedForAll(
+        await library.getSigner().getAddress(),
+        FractionlessWrapperAddress
+      );
+      setApproved(appr);
+      console.log(appr);
+      */
+      setApproved("true");
     }
   }
-
-  function stake() {
-    console.log("staking");
+  async function approveFRACTIONbeforeTransfer() {
+    FractionlessContract.setApprovalForAll(FractionlessWrapperAddress, "true");
   }
-  function unstake() {
-    console.log("staking");
+
+  async function stake() {
+    const tx = await FractionlessWrapperContract.stake(stakeamount);
+    await tx.wait();
+  }
+  async function unstake() {
+    const tx = await FractionlessWrapperContract.unstake(unstakeamount);
+    await tx.wait();
   }
   return (
     <div>
@@ -138,7 +163,7 @@ export const Stake = () => {
                       float: "left",
                     }}
                   >
-                    Wrappable tokens in wallet : {tokeninwallet}
+                    Wrapped tokens in wallet : {tokeninwallet}
                     FRACTIONLESS
                   </span>
                   <br />
@@ -154,32 +179,46 @@ export const Stake = () => {
                       }}
                     />
                   </div>
-                  <div style={{ float: "left" }}>Stake Rewards : {}</div>
+                  <div style={{ float: "left" }}>
+                    STAKE Rewards : {stakeamount} x 10000 + 20 ={" "}
+                    {stakeamount * 100000 + 20}
+                  </div>
+                  <br />
+                  <br />
+                  <div style={{ float: "left" }}>
+                    Stream : {stakeamount * (100000 + 20) * 60 * 60 * 24}{" "}
+                    wei/day
+                  </div>
                   <br />
                 </div>
                 <br />
                 <br />
                 <div style={{ marginBottom: "3px" }} className="buttonCard">
-                  <button
-                    style={{ fontSize: "15px", height: "50px" }}
-                    onClick={() => {
-                      stake();
-                    }}
-                    className="buttonstandard"
-                  >
-                    Allow the Fraction Protocol to uses your FRACT
-                  </button>
+                  {approved === "false" ? (
+                    <button
+                      style={{ fontSize: "15px", height: "50px" }}
+                      onClick={() => {
+                        approveFRACTIONbeforeTransfer();
+                      }}
+                      className="buttonstandard"
+                    >
+                      Allow the Fraction Protocol to uses your FRACTIONLESS
+                    </button>
+                  ) : null}
                 </div>
+
                 <div className="buttonCard">
-                  <button
-                    style={{ fontSize: "22px", height: "45px" }}
-                    onClick={() => {
-                      stake();
-                    }}
-                    className="buttonstandard"
-                  >
-                    STAKE
-                  </button>
+                  {approved !== "false" ? (
+                    <button
+                      style={{ fontSize: "22px", height: "45px" }}
+                      onClick={() => {
+                        stake();
+                      }}
+                      className="buttonstandard"
+                    >
+                      STAKE
+                    </button>
+                  ) : null}
                 </div>
               </>
             )}
