@@ -19,9 +19,10 @@ export const redirect = (url) => {
   window.open(url, "_blank");
 };
 
-export const FractxTokenAddress = "";
-export const FractTokenAddress = "";
-export const FractionlessAddress = "";
-export const FractionlessWrapperAddress = "";
-export const FractionNFTAddress = "";
-export const NFTRegistryAddress = "";
+export const FractxTokenAddress = "0xbcC35477b5b360713C8CE874EE936a0FB14b5E3c";
+export const FractTokenAddress = "0x953f88014255241332d8841C34921572db112D65";
+export const FractionlessAddress = "0x147Aef142CCebf9902ec57A369D4aB1B6126Fc69";
+export const FractionlessWrapperAddress =
+  "0xb68dF2721e747a30A611D9279169d36E448C600C";
+export const FractionNFTAddress = "0x8410785dc33Af2bf5c885275e5E55585af6dCfd7";
+export const NFTRegistryAddress = "0x4DACaF23216889EA45BF32Ab6411F7BaF2E95617";

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Mint.css";
 import { ethers } from "ethers";
-import { FractionNFTABI } from "../abis/FractionNFTABI";
 import { web3Modal } from "../App";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { NFTRegistryABI } from "../abis/NFTRegistryABI";
@@ -13,8 +12,6 @@ export const Mint = () => {
   const [fileUrl, setFileUrl] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
-  const contractaddress = "";
   var NFTRegistry;
   useEffect(() => {
     loadContract();
@@ -34,6 +31,8 @@ export const Mint = () => {
 
   async function onChange(e) {
     const file = e.target.files[0];
+    /// Note : initial plan was to use NFT.storage, but it is broken for webpack 4
+    // and to upgrade will cause other dependecies to break too
     try {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
@@ -143,7 +142,9 @@ export const Mint = () => {
                       }}
                     />
                     <h5>Image</h5>
-                    <img alt="" width="400" height="320" src={fileUrl} />
+                    {fileUrl ? (
+                      <img alt="" width="400" height="320" src={fileUrl} />
+                    ) : null}
 
                     <label htmlFor="upload-photo">Browse...</label>
                     <br />
