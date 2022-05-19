@@ -1,10 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { web3Modal } from "../App";
 import { FractionTokenABI } from "../abis/FractionTokenABI ";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
-import { FractionlessWrapperAddress, FractTokenAddress } from "../utils/utils";
+import {
+  FractionlessAddress,
+  FractionlessWrapperAddress,
+  FractTokenAddress,
+} from "../utils/utils";
+import { getTokenBalance } from "../utils/covalentDataPool";
 
 export const Trade = () => {
   const [unwrapamount, setUnwrapAmount] = useState("");
@@ -46,20 +51,29 @@ export const Trade = () => {
         FractionTokenABI,
         library.getSigner()
       );
-      console.log(await library.getSigner().getAddress());
-      /*
-      const allow = await FractTokenAddress.allowance(
+      const allow = await Tokencontract.allowance(
         await library.getSigner().getAddress(),
         FractionlessWrapperAddress
       );
-      console.log(allow);
       setAllowance(allow);
-      */
+
+      settokenWrapped(
+        ethers.utils.formatEther(
+          await getTokenBalance(
+            await library.getSigner().getAddress(),
+            "80001",
+            FractTokenAddress
+          )
+        )
+      );
     }
   }
 
   async function approveERCbeforeTransfer() {
-    Tokencontract.approve(FractionlessWrapperAddress, 10 ** 35);
+    await Tokencontract.approve(
+      FractionlessWrapperAddress,
+      "1000000000000000000000000000000000000000000000000000000000000"
+    );
   }
 
   async function wrap() {
@@ -177,7 +191,7 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    Wrappable Tokens in wallet : {tokenWrapped}
+                    Fract Tokens in wallet : {tokenWrapped} FRACT
                   </span>
                   <br />
                   <span
@@ -187,7 +201,9 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    FRACT Contract allowance : {allowance}
+                    FRACT Contract allowance :&nbsp;
+                    {allowance ? ethers.utils.formatEther(allowance) : null}
+                    &nbsp;FRACT
                   </span>
                   <br />
                   <div>
@@ -214,7 +230,7 @@ export const Trade = () => {
                 </div>
                 <br />
                 <br />
-                {allowance < wrapamount ? (
+                {allowance / 10 ** 18 < wrapamount ? (
                   <div style={{ marginBottom: "3px" }} className="buttonCard">
                     <button
                       style={{ fontSize: "15px", height: "50px" }}
@@ -228,7 +244,7 @@ export const Trade = () => {
                   </div>
                 ) : null}
                 <div className="buttonCard">
-                  {allowance >= wrapamount ? (
+                  {allowance / 10 ** 18 >= wrapamount ? (
                     <button
                       style={{ fontSize: "22px", height: "45px" }}
                       onClick={wrap}

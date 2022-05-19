@@ -1,5 +1,4 @@
 export const getNFTholders = (address) => {};
-
 export const getTokenBalance = async (
   address,
   chain,
@@ -10,12 +9,18 @@ export const getTokenBalance = async (
   );
   const data = await res.json();
   const tokenBalance = JSON.parse(JSON.stringify(data)).data.items;
+
   for (var i = 0; i < tokenBalance.length; i++) {
-    if ((tokenBalance[i].contract_address = paticularTokenaddress)) {
+    if (
+      tokenBalance[i].contract_address.toString().toLowerCase() ===
+      paticularTokenaddress.toString().toLowerCase()
+    ) {
       return tokenBalance[i].balance;
     }
   }
+  return 0;
 };
+
 export const getTokenSupply = (address) => {};
 
 export const getTokenHolders = async (address, chain) => {

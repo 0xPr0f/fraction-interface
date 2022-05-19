@@ -30,7 +30,6 @@ export const Faucet = () => {
   }
 
   async function requestFunds() {
-    console.log(address);
     const tx = await Tokencontract.Faucetmint(address);
     await tx.wait();
   }

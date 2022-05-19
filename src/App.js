@@ -270,7 +270,6 @@ function App() {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/faucet" element={<Faucet />} />
             </Routes>
-            <button onClick={() => {}}>Test</button>
             {/* Connect to wallet primary button */}
 
             <div id="loginholder">

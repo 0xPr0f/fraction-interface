@@ -13,6 +13,7 @@
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "@walletconnect/web3-provider": "1.7.3",
+    "big-integer": "^1.6.51",
     "ethers": "^5.6.5",
     "font-awesome": "^4.7.0",
     "ipfs-http-client": "^56.0.3",

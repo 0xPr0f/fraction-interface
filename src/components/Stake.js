@@ -8,6 +8,8 @@ import {
   FractionlessWrapperAddress,
 } from "../utils/utils";
 import { FractionlessABI } from "../abis/FractionlessABI";
+import { getTokenBalance } from "../utils/covalentDataPool";
+
 export const Stake = () => {
   const [unstakeamount, setUnStakeAmount] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
@@ -46,15 +48,22 @@ export const Stake = () => {
         FractionlessABI,
         library.getSigner()
       );
-      /*
       const appr = await FractionlessContract.isApprovedForAll(
         await library.getSigner().getAddress(),
         FractionlessWrapperAddress
       );
       setApproved(appr);
-      console.log(appr);
-      */
-      setApproved("true");
+      settokeninwallet(
+        await getTokenBalance(
+          await library.getSigner().getAddress(),
+          "80001",
+          FractionlessAddress
+        )
+      );
+      const stakedtkn = await FractionlessWrapperContract.stakedWrappedFLTokens(
+        await library.getSigner().getAddress()
+      );
+      settokenStaked(stakedtkn);
     }
   }
   async function approveFRACTIONbeforeTransfer() {
@@ -163,7 +172,7 @@ export const Stake = () => {
                       float: "left",
                     }}
                   >
-                    Wrapped tokens in wallet : {tokeninwallet}
+                    Wrapped tokens in wallet : {tokeninwallet} &nbsp;
                     FRACTIONLESS
                   </span>
                   <br />
@@ -194,7 +203,7 @@ export const Stake = () => {
                 <br />
                 <br />
                 <div style={{ marginBottom: "3px" }} className="buttonCard">
-                  {approved === "false" ? (
+                  {approved === false ? (
                     <button
                       style={{ fontSize: "15px", height: "50px" }}
                       onClick={() => {
@@ -208,7 +217,7 @@ export const Stake = () => {
                 </div>
 
                 <div className="buttonCard">
-                  {approved !== "false" ? (
+                  {approved !== false ? (
                     <button
                       style={{ fontSize: "22px", height: "45px" }}
                       onClick={() => {
