@@ -19,6 +19,15 @@ export const redirect = (url) => {
   window.open(url, "_blank");
 };
 
+export const truncateAddress = (address) => {
+  if (!address) return "No Account";
+  const match = address.match(
+    /^(0x[a-zA-Z0-9]{2})[a-zA-Z0-9]+([a-zA-Z0-9]{2})$/
+  );
+  if (!match) return address;
+  return `${match[1]}…${match[2]}`;
+};
+
 export const FractxTokenAddress = "0xbcC35477b5b360713C8CE874EE936a0FB14b5E3c";
 export const FractTokenAddress = "0x953f88014255241332d8841C34921572db112D65";
 export const FractionlessAddress = "0x147Aef142CCebf9902ec57A369D4aB1B6126Fc69";

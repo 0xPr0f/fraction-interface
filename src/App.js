@@ -16,12 +16,18 @@ import { getEllipsisTxt } from "./utils/utils";
 import { Faucet } from "./components/Faucet";
 import { getBlockHeight } from "./utils/covalentDataPool";
 import { redirect } from "./utils/utils";
-
+import { getChainName } from "./utils/rpc";
+import { useNotification } from "web3uikit";
+import { toHex } from "./utils/utils";
+import { networkParams } from "./utils/rpc";
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
 });
+var url = "0xb68dF2721e747a30A611D9279169d36E448C600C";
+
 function App() {
+  const dispatch = useNotification();
   const [provider, setProvider] = useState();
   const [block, setblock] = useState("");
   const [library, setLibrary] = useState();
@@ -33,8 +39,19 @@ function App() {
   const [message, setMessage] = useState("");
   const [verified, setVerified] = useState();
   const [barposition, setBarposition] = useState();
-
   const [tab, setTab] = useState();
+
+  const handleNewNotification = (type, title, message) => {
+    dispatch({
+      type,
+      message: message,
+      title: title,
+      icon: undefined,
+      duration: 40,
+      position: "topR",
+    });
+  };
+
   const connectWallet = async () => {
     try {
       const provider = await web3Modal.connect();
@@ -45,7 +62,14 @@ function App() {
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
-      setChainId(network.chainId);
+      if (network.chainId !== 80001) {
+        handleNewNotification(
+          "error",
+          "invalid chain detected",
+          `Wrong chain, please switch chain to polygon mumbai`
+        );
+      }
+      setChainId(getChainName(network.chainId));
     } catch (error) {
       setError(error);
     }
@@ -79,6 +103,28 @@ function App() {
   async function loadStuff() {
     setblock(await getBlockHeight(80001));
   }
+  const switchNetwork = async () => {
+    try {
+      await library.provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x13881" }],
+      });
+      setChainId(getChainName(network.chainId));
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        try {
+          await library.provider.request({
+            method: "wallet_addEthereumChain",
+            params: [networkParams["0x13881"]],
+          });
+          setChainId(getChainName(network.chainId));
+        } catch (error) {
+          setError(error);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts) => {
@@ -87,7 +133,14 @@ function App() {
       };
 
       const handleChainChanged = (_hexChainId) => {
-        setChainId(_hexChainId);
+        if (_hexChainId !== 80001) {
+          handleNewNotification(
+            "error",
+            "invalid chain detected",
+            `Wrong chain, please switch chain to polygon mumbai`
+          );
+        }
+        setChainId(getChainName(_hexChainId));
       };
 
       const handleDisconnect = () => {
@@ -273,8 +326,8 @@ function App() {
             {/* Connect to wallet primary button */}
 
             <div id="loginholder">
-              <button className="login">
-                <span className="logintxt">Dropdown</span>
+              <button onClick={switchNetwork} className="login">
+                <span className="logintxt">{chainId}</span>
               </button>
               {window.localStorage.getItem("connected") === "false" ? null : (
                 <button className="login">

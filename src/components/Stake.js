@@ -9,8 +9,9 @@ import {
 } from "../utils/utils";
 import { FractionlessABI } from "../abis/FractionlessABI";
 import { getTokenBalance } from "../utils/covalentDataPool";
-
+import { useNotification } from "web3uikit";
 export const Stake = () => {
+  const dispatch = useNotification();
   const [unstakeamount, setUnStakeAmount] = useState("");
   const [stakeamount, setStakeAmount] = useState("");
   const [staketype, setStaketype] = useState("");
@@ -21,6 +22,16 @@ export const Stake = () => {
   var FractionlessWrapperContract;
   var FractionlessContract;
 
+  const handleNewNotification = (type, title, message) => {
+    dispatch({
+      type,
+      message: message,
+      title: title,
+      icon: undefined,
+      duration: 40,
+      position: "topR",
+    });
+  };
   function Minttype(type) {
     if (type === "1") {
       document.getElementById("mintype1").style.backgroundColor = "transparent";
@@ -71,12 +82,30 @@ export const Stake = () => {
   }
 
   async function stake() {
-    const tx = await FractionlessWrapperContract.stake(stakeamount);
-    await tx.wait();
+    try {
+      const tx = await FractionlessWrapperContract.stake(stakeamount);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
   }
   async function unstake() {
-    const tx = await FractionlessWrapperContract.unstake(unstakeamount);
-    await tx.wait();
+    try {
+      const tx = await FractionlessWrapperContract.unstake(unstakeamount);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
   }
   return (
     <div>

@@ -5,9 +5,11 @@ import { web3Modal } from "../App";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { NFTRegistryABI } from "../abis/NFTRegistryABI";
 import { NFTRegistryAddress } from "../utils/utils";
+import { useNotification } from "web3uikit";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 export const Mint = () => {
+  const dispatch = useNotification();
   const [minttype, setMintype] = useState("");
   const [fileUrl, setFileUrl] = useState(null);
   const [name, setName] = useState("");
@@ -45,6 +47,16 @@ export const Mint = () => {
     }
   }
 
+  const handleNewNotification = (type, title, message) => {
+    dispatch({
+      type,
+      message: message,
+      title: title,
+      icon: undefined,
+      duration: 40,
+      position: "topR",
+    });
+  };
   async function mint() {
     if (!name || !description || !fileUrl) return;
     console.log("mint with custom");
@@ -60,7 +72,12 @@ export const Mint = () => {
       const tx = await NFTRegistry.setName(name, url, {
         value: ethers.utils.parseEther("0.3"),
       });
-      await tx.wait();
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
       console.log("mint with normal");
     } catch (error) {
       console.log("Error uploading file: ", error);
@@ -71,7 +88,12 @@ export const Mint = () => {
     const tx = await NFTRegistry.setName(name, "", {
       value: ethers.utils.parseEther("0.3"),
     });
-    await tx.wait;
+    const txhash = await tx.wait;
+    handleNewNotification(
+      "success",
+      "Trasaction completed",
+      `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+    );
     console.log("mint with defualt");
   }
   function Minttype(type) {

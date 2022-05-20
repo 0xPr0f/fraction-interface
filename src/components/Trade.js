@@ -1,17 +1,16 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import { web3Modal } from "../App";
 import { FractionTokenABI } from "../abis/FractionTokenABI ";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
-import {
-  FractionlessAddress,
-  FractionlessWrapperAddress,
-  FractTokenAddress,
-} from "../utils/utils";
+import "../styles/Trade.css";
+import { FractionlessWrapperAddress, FractTokenAddress } from "../utils/utils";
 import { getTokenBalance } from "../utils/covalentDataPool";
+import { useNotification } from "web3uikit";
 
 export const Trade = () => {
+  const dispatch = useNotification();
   const [unwrapamount, setUnwrapAmount] = useState("");
   const [addressToken, setAddressToken] = useState(
     "0x953f88014255241332d8841C34921572db112D65"
@@ -21,6 +20,16 @@ export const Trade = () => {
   const [wraptype, setWraptype] = useState("");
   const [tokenWrapped, settokenWrapped] = useState();
 
+  const handleNewNotification = (type, title, message) => {
+    dispatch({
+      type,
+      message: message,
+      title: title,
+      icon: undefined,
+      duration: 40,
+      position: "topR",
+    });
+  };
   function Minttype(type) {
     if (type === "1") {
       document.getElementById("mintype1").style.backgroundColor = "transparent";
@@ -70,24 +79,56 @@ export const Trade = () => {
   }
 
   async function approveERCbeforeTransfer() {
-    await Tokencontract.approve(
-      FractionlessWrapperAddress,
-      "1000000000000000000000000000000000000000000000000000000000000"
-    );
+    try {
+      const tx = await Tokencontract.approve(
+        FractionlessWrapperAddress,
+        "1000000000000000000000000000000000000000000000000000000000000"
+      );
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
+  }
+  function change() {
+    console.log("changed");
   }
 
   async function wrap() {
-    const tx = await FractionlessWrapperContract.wrap(wrapamount, addressToken);
-    await tx.wait();
-    console.log(wrapamount, addressToken);
+    try {
+      const tx = await FractionlessWrapperContract.wrap(
+        wrapamount,
+        addressToken
+      );
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
   }
   async function unwrap() {
-    const tx = await FractionlessWrapperContract.unwrap(
-      unwrapamount,
-      addressToken
-    );
-    await tx.wait();
-    console.log(unwrapamount, addressToken);
+    try {
+      const tx = await FractionlessWrapperContract.unwrap(
+        unwrapamount,
+        addressToken
+      );
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
   }
 
   return (
@@ -193,6 +234,10 @@ export const Trade = () => {
                   >
                     Fract Tokens in wallet : {tokenWrapped} FRACT
                   </span>
+                  <label className="switch">
+                    <input type="checkbox" onChange={change} checked />
+                    <span className="slider round"></span>
+                  </label>
                   <br />
                   <span
                     style={{

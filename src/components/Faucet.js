@@ -3,8 +3,9 @@ import { web3Modal } from "../App";
 import { ethers } from "ethers";
 import { FractionTokenABI } from "../abis/FractionTokenABI ";
 import "../styles/Faucet.css";
-
+import { useNotification } from "web3uikit";
 export const Faucet = () => {
+  const dispatch = useNotification();
   const [address, setAddress] = useState("");
   const [tokenLeft, setTokenLeft] = useState("");
   const contractaddress = "0x953f88014255241332d8841C34921572db112D65";
@@ -13,6 +14,16 @@ export const Faucet = () => {
     loadContract();
   });
 
+  const handleNewNotification = (type, title, message) => {
+    dispatch({
+      type,
+      message: message,
+      title: title,
+      icon: undefined,
+      duration: 40,
+      position: "topR",
+    });
+  };
   async function loadContract() {
     if (window.localStorage.getItem("connected") !== "false") {
       const provider = await web3Modal.connect();
@@ -30,8 +41,17 @@ export const Faucet = () => {
   }
 
   async function requestFunds() {
-    const tx = await Tokencontract.Faucetmint(address);
-    await tx.wait();
+    try {
+      const tx = await Tokencontract.Faucetmint(address);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e}`);
+    }
   }
   return (
     <div>
