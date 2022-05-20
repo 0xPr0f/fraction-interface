@@ -62,6 +62,9 @@ export const Analytics = () => {
       )
     );
     setnftHolders(await getTokenHolders(FractionNFTAddress, "80001"));
+    if (FractxTokenBalance.length > 30) {
+      document.getElementById("fractx").style.fontSize = "16px";
+    }
   }
   return (
     <div>
@@ -131,7 +134,9 @@ export const Analytics = () => {
                   <br />
                 </span>
                 <span style={{ fontSize: "23px" }}>
-                  {FractxTokenBalance / 10 ** 18} FRACTx
+                  <span id="fractx">{FractxTokenBalance / 10 ** 18}</span>
+                  <br />
+                  FRACTx
                 </span>
               </div>
               <div className="grid-item">
@@ -144,7 +149,9 @@ export const Analytics = () => {
                   <br />
                 </span>
                 <span style={{ fontSize: "23px" }}>
-                  {FractTokenBalance / 10 ** 18} FRACT
+                  <span>{FractTokenBalance / 10 ** 18} </span>
+                  <br />
+                  FRACT
                 </span>
               </div>
             </div>

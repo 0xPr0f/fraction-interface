@@ -57,3 +57,12 @@
   padding: 20px;
   text-align: center;
  }
+
+ .buttonstandardmint{
+  border-radius: 15px;
+  border-width: 0px;
+  color: white;
+  background-image: linear-gradient(90deg, #0364ff, #1ac7fe);
+  width: 100%;
+  cursor: pointer;
+ }

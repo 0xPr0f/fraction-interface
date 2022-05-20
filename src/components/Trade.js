@@ -8,6 +8,8 @@ import "../styles/Trade.css";
 import { FractionlessWrapperAddress, FractTokenAddress } from "../utils/utils";
 import { getTokenBalance } from "../utils/covalentDataPool";
 import { useNotification } from "web3uikit";
+import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
 
 export const Trade = () => {
   const dispatch = useNotification();
@@ -19,6 +21,7 @@ export const Trade = () => {
   const [wrapamount, setWrapAmount] = useState("");
   const [wraptype, setWraptype] = useState("");
   const [tokenWrapped, settokenWrapped] = useState();
+  const [checked, setChecked] = useState(false);
 
   const handleNewNotification = (type, title, message) => {
     dispatch({
@@ -94,10 +97,14 @@ export const Trade = () => {
       handleNewNotification("error", "Error", `${e.message}`);
     }
   }
-  function change() {
-    console.log("changed");
-  }
-
+  useEffect(() => {
+    const lsallowance = window.localStorage.getItem("showallowance") === "true";
+    setChecked(lsallowance);
+  });
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+    window.localStorage.setItem("showallowance", event.target.checked);
+  };
   async function wrap() {
     try {
       const tx = await FractionlessWrapperContract.wrap(
@@ -234,23 +241,35 @@ export const Trade = () => {
                   >
                     Fract Tokens in wallet : {tokenWrapped} FRACT
                   </span>
-                  <label className="switch">
-                    <input type="checkbox" onChange={change} checked />
-                    <span className="slider round"></span>
-                  </label>
-                  <br />
-                  <span
-                    style={{
-                      // marginTop: "0px",
-                      fontSize: "14px",
-                      float: "left",
-                    }}
+                  <Tooltip
+                    title="show/hide contract allowance"
+                    arrow
+                    placement="top-start"
                   >
-                    FRACT Contract allowance :&nbsp;
-                    {allowance ? ethers.utils.formatEther(allowance) : null}
-                    &nbsp;FRACT
-                  </span>
+                    <Switch
+                      checked={checked}
+                      onChange={handleChange}
+                      inputProps={{ "aria-label": "controlled" }}
+                    />
+                  </Tooltip>
                   <br />
+                  {!checked ? null : (
+                    <>
+                      <span
+                        style={{
+                          // marginTop: "0px",
+                          fontSize: "14px",
+                          float: "left",
+                        }}
+                      >
+                        FRACT Contract allowance :&nbsp;
+                        {allowance ? allowance / 10 ** 18 : null}
+                        &nbsp;FRACT
+                      </span>
+                      <br />
+                      <br />
+                    </>
+                  )}
                   <div>
                     <input
                       style={{ fontSize: "18px" }}

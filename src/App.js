@@ -19,6 +19,7 @@ import { redirect } from "./utils/utils";
 import { getChainName } from "./utils/rpc";
 import { useNotification } from "web3uikit";
 import { networkParams } from "./utils/rpc";
+import { getChainById } from "./utils/networks";
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
@@ -60,6 +61,7 @@ function App() {
       setProvider(provider);
       setLibrary(library);
       if (accounts) setAccount(accounts[0]);
+      setChainId(getChainName(network.chainId));
       if (network.chainId !== 80001) {
         handleNewNotification(
           "error",
@@ -67,7 +69,6 @@ function App() {
           `Wrong chain, please switch chain to polygon mumbai`
         );
       }
-      setChainId(getChainName(network.chainId));
     } catch (error) {
       setError(error);
     }
@@ -124,7 +125,12 @@ function App() {
         if (accounts) setAccount(accounts[0]);
       };
 
+      window.ethereum.on("chainChanged", (chainId) => {
+        setChainId(getChainById(chainId));
+      });
+
       const handleChainChanged = (_hexChainId) => {
+        setChainId(getChainName(_hexChainId));
         if (_hexChainId !== 80001) {
           handleNewNotification(
             "error",
@@ -132,12 +138,17 @@ function App() {
             `Wrong chain, please switch chain to polygon mumbai`
           );
         }
-        setChainId(getChainName(_hexChainId));
       };
+      window.ethereum.on("accountsChanged", (accounts) => {
+        setAccount(accounts);
+        if (!accounts.length) {
+          disconnect();
+        }
+      });
 
       const handleDisconnect = () => {
         console.log("disconnect", error);
-        disconnect();
+        // disconnect();
       };
 
       provider.on("accountsChanged", handleAccountsChanged);
@@ -318,9 +329,11 @@ function App() {
             {/* Connect to wallet primary button */}
 
             <div id="loginholder">
-              <button onClick={switchNetwork} className="login">
-                <span className="logintxt">{chainId}</span>
-              </button>
+              {window.localStorage.getItem("connected") === "false" ? null : (
+                <button onClick={switchNetwork} className="login">
+                  <span className="logintxt">{chainId}</span>
+                </button>
+              )}
               {window.localStorage.getItem("connected") === "false" ? null : (
                 <button className="login">
                   <span className="logintxt">{getEllipsisTxt(account)}</span>

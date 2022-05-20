@@ -4,8 +4,9 @@ import { ethers } from "ethers";
 import { web3Modal } from "../App";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { NFTRegistryABI } from "../abis/NFTRegistryABI";
-import { NFTRegistryAddress } from "../utils/utils";
+import { FractionNFTAddress, NFTRegistryAddress } from "../utils/utils";
 import { useNotification } from "web3uikit";
+import { FractionNFTABI } from "../abis/FractionNFTABI";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 export const Mint = () => {
@@ -13,8 +14,15 @@ export const Mint = () => {
   const [minttype, setMintype] = useState("");
   const [fileUrl, setFileUrl] = useState(null);
   const [name, setName] = useState("");
+  const [ensname, setEnsName] = useState("");
+  const [udname, setUdName] = useState("");
+  const [twittersocial, setTwittersocial] = useState("");
+  const [github, setGithub] = useState("");
   const [description, setDescription] = useState("");
+  const [balance, setbalance] = useState(0);
+
   var NFTRegistry;
+  var FractionNFT;
   useEffect(() => {
     loadContract();
   });
@@ -28,6 +36,16 @@ export const Mint = () => {
         NFTRegistryABI,
         library.getSigner()
       );
+
+      FractionNFT = new ethers.Contract(
+        FractionNFTAddress,
+        FractionNFTABI,
+        library.getSigner()
+      );
+      const _balance = await FractionNFT.balanceOf(
+        await library.getSigner().getAddress()
+      );
+      setbalance(Number.parseInt(_balance));
     }
   }
 
@@ -52,7 +70,62 @@ export const Mint = () => {
       console.log("Error uploading file: ", e);
     }
   }
-
+  async function setensname() {
+    try {
+      if (ensname.length < 2) return;
+      const tx = await NFTRegistry.setEnsName(ensname);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
+  }
+  async function setudname() {
+    try {
+      if (udname.length < 2) return;
+      const tx = await NFTRegistry.setEnsName(udname);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
+  }
+  async function settwitter() {
+    try {
+      if (twittersocial.length < 3) return;
+      const tx = await NFTRegistry.setEnsName(twittersocial);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
+  }
+  async function setgithub() {
+    try {
+      if (github.length < 3) return;
+      const tx = await NFTRegistry.setEnsName(github);
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
+  }
   const handleNewNotification = (type, title, message) => {
     dispatch({
       type,
@@ -93,10 +166,18 @@ export const Mint = () => {
   async function mintdefault() {
     try {
       if (!name) return;
-      const tx = await NFTRegistry.setName(name, "", {
+      const data = JSON.stringify({
+        name,
+        description:
+          "Fraction NFT to determine your Fraction and earnings on semi-fungible stakes",
+        image: "",
+      });
+      const added = await client.add(data);
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const tx = await NFTRegistry.setName(name, url, {
         value: ethers.utils.parseEther("0.3"),
       });
-      const txhash = await tx.wait;
+      const txhash = await tx.wait();
       handleNewNotification(
         "success",
         "Trasaction completed",
@@ -114,6 +195,7 @@ export const Mint = () => {
     }
     setMintype(type);
   }
+
   return (
     <div>
       <div
@@ -121,122 +203,224 @@ export const Mint = () => {
         style={{ display: "flex", justifyContent: "center" }}
       >
         <div className="pageboxmint1">
-          <h2> Mint Fraction NFT </h2>
-          <div style={{ display: "flex" }}>
-            <button
-              id="mintype1"
-              onClick={() => {
-                Minttype("1");
-              }}
-              className="buttonstandardchoose"
-            >
-              Customise
-            </button>
-            <div style={{ fontSize: "30px" }}>/</div>
-            <button
-              id="mintype2"
-              onClick={() => {
-                Minttype("2");
-              }}
-              className="buttonstandardchoose"
-            >
-              Defualt
-            </button>
-          </div>
-          <div>
-            {minttype === "1" ? (
-              <>
-                <div>
-                  <div className="accountDetails">
-                    <br />
-                    <h5>Name</h5>
-                    <input
-                      type="text"
-                      className="inputFaucet"
-                      placeholder="NFT man"
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value);
-                      }}
-                    />
-                    <h5>Description</h5>
-                    <textarea
-                      style={{
-                        maxWidth: "375px",
-                        minWidth: "374px",
-                        minHeight: "30px",
-                      }}
-                      type="text"
-                      className="inputFaucet"
-                      placeholder="An nft to showcase my fraction"
-                      value={description}
-                      onChange={(e) => {
-                        setDescription(e.target.value);
-                      }}
-                    />
-                    <h5>Image</h5>
-                    {fileUrl ? (
-                      <img alt="" width="400" height="320" src={fileUrl} />
-                    ) : null}
+          {balance === 0 ? (
+            <>
+              <h2> Mint Fraction NFT </h2>
+              <div style={{ display: "flex" }}>
+                <button
+                  id="mintype1"
+                  onClick={() => {
+                    Minttype("1");
+                  }}
+                  className="buttonstandardchoose"
+                >
+                  Customise
+                </button>
+                <div style={{ fontSize: "30px" }}>/</div>
+                <button
+                  id="mintype2"
+                  onClick={() => {
+                    Minttype("2");
+                  }}
+                  className="buttonstandardchoose"
+                >
+                  Defualt
+                </button>
+              </div>
+              <div>
+                {minttype === "1" ? (
+                  <>
+                    <div>
+                      <div className="accountDetails">
+                        <br />
+                        <h5>Name</h5>
+                        <input
+                          type="text"
+                          className="inputFaucet"
+                          placeholder="NFT man"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                        />
+                        <h5>Description</h5>
+                        <textarea
+                          style={{
+                            maxWidth: "375px",
+                            minWidth: "374px",
+                            minHeight: "30px",
+                          }}
+                          type="text"
+                          className="inputFaucet"
+                          placeholder="An nft to showcase my fraction"
+                          value={description}
+                          onChange={(e) => {
+                            setDescription(e.target.value);
+                          }}
+                        />
+                        <h5>Image</h5>
+                        {fileUrl ? (
+                          <img alt="" width="400" height="320" src={fileUrl} />
+                        ) : null}
 
-                    <label htmlFor="upload-photo">Browse...</label>
+                        <label htmlFor="upload-photo">Browse...</label>
+                        <br />
+                        <input
+                          type="file"
+                          id="upload-photo"
+                          onChange={onChange}
+                        />
+                        <br />
+                      </div>
+                    </div>
+                    <div className="buttonCard">
+                      <button
+                        style={{ fontSize: "22px", height: "45px" }}
+                        onClick={() => {
+                          mint();
+                        }}
+                        className="buttonstandard"
+                      >
+                        Mint
+                      </button>
+                    </div>
+                  </>
+                ) : null}
+                {minttype === "2" ? (
+                  <>
                     <br />
-                    <input type="file" id="upload-photo" onChange={onChange} />
+
+                    <div>
+                      <p className="error"> </p>
+
+                      <div
+                        style={{ fontWeight: "bold" }}
+                        className="accountDetails"
+                      >
+                        <h5>Name</h5>
+                        <input
+                          type="text"
+                          className="inputFaucet"
+                          placeholder="NFT man"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                        />
+                        <br />- Mint with defualt settings -
+                      </div>
+                    </div>
                     <br />
-                  </div>
-                </div>
-                <div className="buttonCard">
-                  <button
-                    style={{ fontSize: "22px", height: "45px" }}
-                    onClick={() => {
-                      mint();
-                    }}
-                    className="buttonstandard"
-                  >
-                    Mint
-                  </button>
-                </div>
-              </>
-            ) : null}
-            {minttype === "2" ? (
-              <>
-                <br />
-
-                <div>
-                  <p className="error"> </p>
-
-                  <div
-                    style={{ fontWeight: "bold" }}
-                    className="accountDetails"
-                  >
-                    <h5>Name</h5>
-                    <input
-                      type="text"
-                      className="inputFaucet"
-                      placeholder="NFT man"
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value);
-                      }}
-                    />
-                    <br />- Mint with defualt settings -
-                  </div>
-                </div>
-                <br />
-                <div className="buttonCard">
-                  <button
-                    style={{ fontSize: "22px", height: "45px" }}
-                    onClick={() => {
-                      mintdefault();
-                    }}
-                    className="buttonstandard"
-                  >
-                    Mint
-                  </button>
-                </div>
-              </>
-            ) : null}
-          </div>
+                    <div className="buttonCard">
+                      <button
+                        style={{ fontSize: "22px", height: "45px" }}
+                        onClick={() => {
+                          mintdefault();
+                        }}
+                        className="buttonstandard"
+                      >
+                        Mint
+                      </button>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </>
+          ) : (
+            <>
+              <h2>configure NFT</h2>
+              <div style={{ display: "flex", width: "390px" }}>
+                <input
+                  type="text"
+                  className="inputFaucet"
+                  placeholder="ENS name"
+                  value={ensname}
+                  onChange={(e) => {
+                    setEnsName(e.target.value);
+                  }}
+                />
+                &nbsp;
+                <button
+                  style={{ width: "80px", height: "40px" }}
+                  onClick={() => {
+                    setensname();
+                  }}
+                  className="buttonstandardmint"
+                >
+                  Set EnsName
+                </button>
+              </div>
+              <br />
+              {/*/////////////////////////////////////////// */}
+              <div style={{ display: "flex", width: "390px" }}>
+                <input
+                  type="text"
+                  className="inputFaucet"
+                  placeholder="UD name"
+                  value={udname}
+                  onChange={(e) => {
+                    setUdName(e.target.value);
+                  }}
+                />
+                &nbsp;
+                <button
+                  style={{ width: "80px", height: "40px" }}
+                  onClick={() => {
+                    setudname();
+                  }}
+                  className="buttonstandardmint"
+                >
+                  Set EnsName
+                </button>
+              </div>
+              <br />
+              {/*/////////////////////////////////////////// */}
+              <div style={{ display: "flex", width: "390px" }}>
+                <input
+                  type="text"
+                  className="inputFaucet"
+                  placeholder="Twitter handle"
+                  value={twittersocial}
+                  onChange={(e) => {
+                    setTwittersocial(e.target.value);
+                  }}
+                />{" "}
+                &nbsp;
+                <button
+                  style={{ width: "80px", height: "40px" }}
+                  onClick={() => {
+                    settwitter();
+                  }}
+                  className="buttonstandardmint"
+                >
+                  Set Twitter
+                </button>
+              </div>
+              <br />
+              {/*/////////////////////////////////////////// */}
+              <div style={{ display: "flex", width: "390px" }}>
+                <input
+                  type="text"
+                  className="inputFaucet"
+                  placeholder="Github"
+                  value={github}
+                  onChange={(e) => {
+                    setGithub(e.target.value);
+                  }}
+                />
+                &nbsp;
+                <button
+                  style={{ width: "80px", height: "40px" }}
+                  onClick={() => {
+                    setgithub();
+                  }}
+                  className="buttonstandardmint"
+                >
+                  Set Github
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
