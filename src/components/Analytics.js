@@ -12,6 +12,7 @@ import {
   FractTokenAddress,
   FractxTokenAddress,
 } from "../utils/utils";
+import { FractionTokenABI } from "../abis/FractionTokenABI ";
 
 export const Analytics = () => {
   const [tokenholders, setTokenholders] = useState("");
@@ -19,13 +20,15 @@ export const Analytics = () => {
   const [FractxTokenBalance, setFractxTokenBalance] = useState("");
   const [nftholders, setnftHolders] = useState("");
   const [chainId, setChainId] = useState("");
-  const [totalStaked, setTotalstaked] = useState();
-  const [totalwrapped, setTotalwrapped] = useState();
+  const [totalStaked, setTotalstaked] = useState(0);
+  const [totalwrapped, setTotalwrapped] = useState(0);
+  const [totalsupply, setTotalSupply] = useState(0);
   useEffect(() => {
     loadCovalentData();
     loadContract();
   });
   var FractionlessWrapperContract;
+  var FractionToken;
   async function loadContract() {
     if (window.localStorage.getItem("connected") !== "false") {
       const provider = await web3Modal.connect();
@@ -36,11 +39,19 @@ export const Analytics = () => {
         FractionWrapperABI,
         library.getSigner()
       );
+      FractionToken = new ethers.Contract(
+        FractTokenAddress,
+        FractionTokenABI,
+        library.getSigner()
+      );
       const mwrap = await FractionlessWrapperContract.TotalWrappedFLTokens();
       setTotalwrapped(mwrap.toString());
 
       const mstake = await FractionlessWrapperContract.TotalStakedFLTokens();
       setTotalstaked(mstake.toString());
+
+      const _totalsupply = await FractionToken.totalSupply();
+      setTotalSupply(_totalsupply.toString());
     }
   }
 
@@ -65,6 +76,9 @@ export const Analytics = () => {
     if (FractxTokenBalance.length > 30) {
       document.getElementById("fractx").style.fontSize = "16px";
     }
+    if (totalsupply.length > 30) {
+      document.getElementById("tsupply").style.fontSize = "15px";
+    }
   }
   return (
     <div>
@@ -76,7 +90,6 @@ export const Analytics = () => {
         </div>
         <div>
           <div style={{ width: "750px" }}>
-            <span>probably a graph</span>
             <div>
               <span
                 style={{
@@ -178,7 +191,7 @@ export const Analytics = () => {
                   Total Supply
                   <br />
                 </span>
-                1
+                <span id="tsupply"> {totalsupply / 10 ** 18}</span>
               </div>
               <div className="grid-item">
                 {" "}

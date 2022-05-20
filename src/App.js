@@ -196,13 +196,11 @@ function App() {
       document.getElementById("main").style.marginLeft = "50px";
       window.localStorage.setItem("sidebar", "closed");
       setBarposition(window.localStorage.getItem("sidebar"));
-      console.log("pull");
     } else {
       document.getElementById("mySidenav").style.width = "260px";
       document.getElementById("main").style.marginLeft = "260px";
       window.localStorage.setItem("sidebar", "open");
       setBarposition(window.localStorage.getItem("sidebar"));
-      console.log("push");
     }
     // document.getElementById("mySidenav").style.display = "none";
   }
