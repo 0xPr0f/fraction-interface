@@ -34,16 +34,22 @@ export const Mint = () => {
   async function onChange(e) {
     const file = e.target.files[0];
     /// Note : initial plan was to use NFT.storage, but it is broken for webpack 4
-    // and to upgrade will cause other dependecies to break too
+    /// and to upgrade will cause other dependecies to break too
     try {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      handleNewNotification(
+        "success",
+        "Upload completed",
+        `<a target="_blank" href="https://ipfs.infura.io/ipfs/${added.path}" >Image Url</a>`
+      );
       console.log(url);
       setFileUrl(url);
-    } catch (error) {
-      console.log("Error uploading file: ", error);
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+      console.log("Error uploading file: ", e);
     }
   }
 
@@ -76,25 +82,30 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
       );
       console.log("mint with normal");
-    } catch (error) {
-      console.log("Error uploading file: ", error);
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+      console.log("Error uploading file: ", e);
     }
   }
   async function mintdefault() {
-    if (!name) return;
-    const tx = await NFTRegistry.setName(name, "", {
-      value: ethers.utils.parseEther("0.3"),
-    });
-    const txhash = await tx.wait;
-    handleNewNotification(
-      "success",
-      "Trasaction completed",
-      `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
-    );
-    console.log("mint with defualt");
+    try {
+      if (!name) return;
+      const tx = await NFTRegistry.setName(name, "", {
+        value: ethers.utils.parseEther("0.3"),
+      });
+      const txhash = await tx.wait;
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+      console.log("mint with defualt");
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
   }
   function Minttype(type) {
     if (minttype === type) {

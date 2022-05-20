@@ -88,10 +88,10 @@ export const Stake = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
       );
     } catch (e) {
-      handleNewNotification("error", "Error", `${e}`);
+      handleNewNotification("error", "Error", `${e.message}`);
     }
   }
   async function unstake() {
@@ -101,10 +101,10 @@ export const Stake = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
       );
     } catch (e) {
-      handleNewNotification("error", "Error", `${e}`);
+      handleNewNotification("error", "Error", `${e.message}`);
     }
   }
   return (

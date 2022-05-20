@@ -18,13 +18,11 @@ import { getBlockHeight } from "./utils/covalentDataPool";
 import { redirect } from "./utils/utils";
 import { getChainName } from "./utils/rpc";
 import { useNotification } from "web3uikit";
-import { toHex } from "./utils/utils";
 import { networkParams } from "./utils/rpc";
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
 });
-var url = "0xb68dF2721e747a30A611D9279169d36E448C600C";
 
 function App() {
   const dispatch = useNotification();
@@ -90,13 +88,7 @@ function App() {
     console.log("nice");
     refreshState();
   };
-  /*
-  useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      connectWallet();
-    }
-  }, []);
-*/
+
   useEffect(() => {
     loadStuff();
   });

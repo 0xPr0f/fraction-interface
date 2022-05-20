@@ -16,7 +16,7 @@ export const Faucet = () => {
 
   const handleNewNotification = (type, title, message) => {
     dispatch({
-      type,
+      type: type,
       message: message,
       title: title,
       icon: undefined,
@@ -47,10 +47,10 @@ export const Faucet = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash}" >Completed Transaction hash</a>`
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
       );
     } catch (e) {
-      handleNewNotification("error", "Error", `${e}`);
+      handleNewNotification("error", "Error", `${e.message}`);
     }
   }
   return (
