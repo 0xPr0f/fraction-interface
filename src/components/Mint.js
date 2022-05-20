@@ -167,10 +167,11 @@ export const Mint = () => {
     try {
       if (!name) return;
       const data = JSON.stringify({
-        name,
+        name: name,
         description:
           "Fraction NFT to determine your Fraction and earnings on semi-fungible stakes",
-        image: "",
+        image:
+          "https://ipfs.infura.io/ipfs/QmcdCYBWj2yjZmxPczDrW5V79XN3KiUZgpH7gUqJAuHSRH",
       });
       const added = await client.add(data);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;

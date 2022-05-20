@@ -6,7 +6,7 @@ import { FractionTokenABI } from "../abis/FractionTokenABI ";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
 import "../styles/Trade.css";
 import { FractionlessWrapperAddress, FractTokenAddress } from "../utils/utils";
-import { getTokenBalance } from "../utils/covalentDataPool";
+import { getTokenBalance } from "../utils/covalentDataSource";
 import { useNotification } from "web3uikit";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";

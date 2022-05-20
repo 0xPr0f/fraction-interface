@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import "../styles/User.css";
 import { web3Modal } from "../App";
 import { ethers } from "ethers";
-import { getTokenBalance } from "../utils/covalentDataPool";
+import { getTokenBalance } from "../utils/covalentDataSource";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
 import {
   FractionlessWrapperAddress,
   FractionlessAddress,
   FractTokenAddress,
   FractxTokenAddress,
+  redirect,
 } from "../utils/utils";
 
 const User = () => {
@@ -17,6 +18,7 @@ const User = () => {
   const [FractxTokenBalance, setFractxTokenBalance] = useState("");
   const [wrap, setWrapped] = useState();
   const [stake, setStake] = useState();
+  const [address, setAddress] = useState();
   const [chainId, setChainId] = useState("");
   useEffect(() => {
     loadContract();
@@ -27,6 +29,7 @@ const User = () => {
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
       setChainId(await library.getSigner().getChainId());
+      setAddress(await library.getSigner().getAddress());
       loadCovalentData(await library.getSigner().getAddress());
       FractionlessWrapperContract = new ethers.Contract(
         FractionlessWrapperAddress,
@@ -140,6 +143,21 @@ const User = () => {
                     <br />
                   </span>
                   1
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    redirect(
+                      `https://console.superfluid.finance/mumbai/supertokens/0xbcC35477b5b360713C8CE874EE936a0FB14b5E3c?tab=streams`
+                    );
+                  }}
+                  className="grid-item"
+                >
+                  Check your Streams
                 </div>
               </div>
             </div>

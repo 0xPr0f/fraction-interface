@@ -14,12 +14,13 @@ import Web3Modal from "web3modal";
 import { providerOptions } from "./utils/providerOptions";
 import { getEllipsisTxt } from "./utils/utils";
 import { Faucet } from "./components/Faucet";
-import { getBlockHeight } from "./utils/covalentDataPool";
+import { getBlockHeight } from "./utils/covalentDataSource";
 import { redirect } from "./utils/utils";
 import { getChainName } from "./utils/rpc";
 import { useNotification } from "web3uikit";
 import { networkParams } from "./utils/rpc";
 import { getChainById } from "./utils/networks";
+import { Tooltip } from "@mui/material";
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
@@ -60,7 +61,9 @@ function App() {
       window.localStorage.setItem("connected", "true");
       setProvider(provider);
       setLibrary(library);
-      if (accounts) setAccount(accounts[0]);
+      if (accounts) {
+        setAccount(accounts[0]);
+      }
       setChainId(getChainName(network.chainId));
       if (network.chainId !== 80001) {
         handleNewNotification(
@@ -86,7 +89,6 @@ function App() {
   const disconnect = async () => {
     web3Modal.clearCachedProvider();
     window.localStorage.setItem("connected", "false");
-    console.log("nice");
     refreshState();
   };
 
@@ -127,10 +129,12 @@ function App() {
 
       window.ethereum.on("chainChanged", (chainId) => {
         setChainId(getChainById(chainId));
+        window.location.reload();
       });
 
       const handleChainChanged = (_hexChainId) => {
         setChainId(getChainName(_hexChainId));
+        window.location.reload();
         if (_hexChainId !== 80001) {
           handleNewNotification(
             "error",
@@ -189,7 +193,17 @@ function App() {
   }
   useEffect(() => {
     setBarposition(window.localStorage.getItem("sidebar"));
+    updateNav();
   });
+  function updateNav() {
+    if (window.localStorage.getItem("sidebar") !== "closed") {
+      document.getElementById("mySidenav").style.width = "100px";
+      document.getElementById("main").style.marginLeft = "50px";
+    } else if (window.localStorage.getItem("sidebar") === "closed") {
+      document.getElementById("mySidenav").style.width = "260px";
+      document.getElementById("main").style.marginLeft = "260px";
+    }
+  }
   function closeNav() {
     if (window.localStorage.getItem("sidebar") !== "closed") {
       document.getElementById("mySidenav").style.width = "100px";
@@ -363,25 +377,31 @@ function App() {
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
-            <div
-              onClick={() => {
-                redirect(`https://mumbai.polygonscan.com/block/${block}`);
-              }}
-              style={{ fontSize: "13px" }}
-              id="block"
+            <Tooltip
+              title="The latest block number on the selected chain"
+              arrow
+              placement="top-start"
             >
-              <span>{block}</span>
-              &nbsp;
-              <FontAwesomeIcon
-                style={{
-                  color: "rgb(37,174,97)",
-                  marginBottom: "3px",
-                  width: "7px",
-                  height: "7px",
+              <div
+                onClick={() => {
+                  redirect(`https://mumbai.polygonscan.com/block/${block}`);
                 }}
-                icon="fa-solid fa-circle"
-              />
-            </div>
+                style={{ fontSize: "13px" }}
+                id="block"
+              >
+                <span>{block}</span>
+                &nbsp;
+                <FontAwesomeIcon
+                  style={{
+                    color: "rgb(37,174,97)",
+                    marginBottom: "3px",
+                    width: "7px",
+                    height: "7px",
+                  }}
+                  icon="fa-solid fa-circle"
+                />
+              </div>
+            </Tooltip>
           </div>
         </div>
       </Router>

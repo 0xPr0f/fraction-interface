@@ -1,4 +1,3 @@
-export const getNFTholders = (address) => {};
 export const getTokenBalance = async (
   address,
   chain,

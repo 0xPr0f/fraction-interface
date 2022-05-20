@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { web3Modal } from "../App";
 import "../styles/Analytics.css";
-import { getTokenHolders } from "../utils/covalentDataPool";
-import { getTokenBalance } from "../utils/covalentDataPool";
+import { getTokenHolders } from "../utils/covalentDataSource";
+import { getTokenBalance } from "../utils/covalentDataSource";
 import { ethers } from "ethers";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
 import {
