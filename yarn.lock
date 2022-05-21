@@ -1168,6 +1168,17 @@
     "@emotion/weak-memoize" "^0.2.5"
     "stylis" "4.0.13"
 
+"@emotion/css@^11.7.1":
+  "integrity" "sha512-S9UjCxSrxEHawOLnWw4upTwfYKb0gVQdatHejn3W9kPyXxmKv3HmjVfJ84kDLmdX8jR20OuDQwaJ4Um24qD9vA=="
+  "resolved" "https://registry.npmjs.org/@emotion/css/-/css-11.9.0.tgz"
+  "version" "11.9.0"
+  dependencies:
+    "@emotion/babel-plugin" "^11.7.1"
+    "@emotion/cache" "^11.7.1"
+    "@emotion/serialize" "^1.0.3"
+    "@emotion/sheet" "^1.0.3"
+    "@emotion/utils" "^1.0.0"
+
 "@emotion/hash@^0.8.0":
   "integrity" "sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow=="
   "resolved" "https://registry.npmjs.org/@emotion/hash/-/hash-0.8.0.tgz"
@@ -1209,7 +1220,7 @@
     "@emotion/utils" "^1.0.0"
     "csstype" "^3.0.2"
 
-"@emotion/sheet@^1.1.0":
+"@emotion/sheet@^1.0.3", "@emotion/sheet@^1.1.0":
   "integrity" "sha512-u0AX4aSo25sMAygCuQTzS+HsImZFuS8llY8O7b9MDRzbJM0kVJlAz6KNDqcG7pOuQZJmj/8X/rAW+66kMnMW+g=="
   "resolved" "https://registry.npmjs.org/@emotion/sheet/-/sheet-1.1.0.tgz"
   "version" "1.1.0"
@@ -1276,7 +1287,7 @@
     "@ethereumjs/common" "^2.6.3"
     "ethereumjs-util" "^7.1.4"
 
-"@ethersproject/abi@^5.6.0", "@ethersproject/abi@5.6.1":
+"@ethersproject/abi@^5.0.1", "@ethersproject/abi@^5.6.0", "@ethersproject/abi@5.6.1":
   "integrity" "sha512-0cqssYh6FXjlwKWBmLm3+zH2BNARoS5u/hxbz+LpQmcDB3w0W553h2btWui1/uZp2GBM/SI3KniTuMcYyHpA5w=="
   "resolved" "https://registry.npmjs.org/@ethersproject/abi/-/abi-5.6.1.tgz"
   "version" "5.6.1"
@@ -3205,6 +3216,53 @@
     "@typescript-eslint/types" "4.33.0"
     "eslint-visitor-keys" "^2.0.0"
 
+"@uauth/abstract-ui@1.1.0":
+  "integrity" "sha512-wi9Yzcrl1bhO+PUdf3M2YUQYnDtz9FPUVn76rQOwFV9w8q6Yv3iEYLLz1UDI9sGSsSPB7D0BiLNPPXq+19HcSg=="
+  "resolved" "https://registry.npmjs.org/@uauth/abstract-ui/-/abstract-ui-1.1.0.tgz"
+  "version" "1.1.0"
+
+"@uauth/common@1.1.0":
+  "integrity" "sha512-sonBgEWWyZmpk6dX+yAIYqCPag8aO7k63zqh9GfS9Q6YtX46af/F5isG77J1bH9VCJQZtyYQztRsHCamHrIcVw=="
+  "resolved" "https://registry.npmjs.org/@uauth/common/-/common-1.1.0.tgz"
+  "version" "1.1.0"
+
+"@uauth/dom-ui@1.1.0":
+  "integrity" "sha512-LCqFm0AqEIIa3JvCm0+EzFp0RneqRjsLC7BZz52FiUaddOzrVjfdijlCWXYDblNgOh0PjtJ71k1ONPT9ZMt2ow=="
+  "resolved" "https://registry.npmjs.org/@uauth/dom-ui/-/dom-ui-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@emotion/css" "^11.7.1"
+    "@uauth/abstract-ui" "1.1.0"
+
+"@uauth/js@^1.1.0", "@uauth/js@1.1.0":
+  "integrity" "sha512-PGl+1h0S59QKVSfKfNRR9s0xFdmIojlL1+rKR4vXGmMGa1iUldUcBZHPlvCo6DdIfVI+Y7mOwEiYnsufKj/BPA=="
+  "resolved" "https://registry.npmjs.org/@uauth/js/-/js-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "@uauth/abstract-ui" "1.1.0"
+    "@uauth/common" "1.1.0"
+    "@uauth/dom-ui" "1.1.0"
+    "@unstoppabledomains/resolution" "^7.0"
+    "global" "^4.4.0"
+    "jose" "^4.5.0"
+
+"@uauth/web3modal@^1.1.0":
+  "integrity" "sha512-/fre45Gz/IRVp3EdR/E2ymm7irvuSGJX5vZRoTOE9JdLCLTXcpXBmXeFy2auh8bNkmv2+4h7FnSoSgR9r++icw=="
+  "resolved" "https://registry.npmjs.org/@uauth/web3modal/-/web3modal-1.1.0.tgz"
+  "version" "1.1.0"
+
+"@unstoppabledomains/resolution@^7.0":
+  "integrity" "sha512-GdXLpP+oRk4lLWMISo7g7gPyKoCONyLoQtYH6GVhXtyY9t+CeHJW2kZ/btcbXg0lmEO6PSr5yYOlDz4wRCq2RA=="
+  "resolved" "https://registry.npmjs.org/@unstoppabledomains/resolution/-/resolution-7.1.4.tgz"
+  "version" "7.1.4"
+  dependencies:
+    "@ethersproject/abi" "^5.0.1"
+    "bn.js" "^4.4.0"
+    "cross-fetch" "^3.1.4"
+    "elliptic" "^6.5.4"
+    "js-sha256" "^0.9.0"
+    "js-sha3" "^0.8.0"
+
 "@walletconnect/browser-utils@^1.7.8":
   "integrity" "sha512-iCL0XCWOZaABIc0lqA79Vyaybr3z26nt8mxiwvfrG8oaKUf5Y21Of4dj+wIXQ4Hhblre6SgDlU0Ffb39+1THOw=="
   "resolved" "https://registry.npmjs.org/@walletconnect/browser-utils/-/browser-utils-1.7.8.tgz"
@@ -4749,7 +4807,7 @@
   "resolved" "https://registry.npmjs.org/bluebird/-/bluebird-3.7.2.tgz"
   "version" "3.7.2"
 
-"bn.js@^4.0.0", "bn.js@^4.1.0", "bn.js@^4.11.0", "bn.js@^4.11.6", "bn.js@^4.11.8", "bn.js@^4.11.9":
+"bn.js@^4.0.0", "bn.js@^4.1.0", "bn.js@^4.11.0", "bn.js@^4.11.6", "bn.js@^4.11.8", "bn.js@^4.11.9", "bn.js@^4.4.0":
   "integrity" "sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA=="
   "resolved" "https://registry.npmjs.org/bn.js/-/bn.js-4.12.0.tgz"
   "version" "4.12.0"
@@ -10234,7 +10292,12 @@
     "import-local" "^3.0.2"
     "jest-cli" "^26.6.0"
 
-"js-sha256@0.9.0":
+"jose@^4.5.0":
+  "integrity" "sha512-+/hpTbRcCw9YC0TOfN1W47pej4a9lRmltdOVdRLz5FP5UvUq3CenhXjQK7u/8NdMIIShMXYAh9VLPhc7TjhvFw=="
+  "resolved" "https://registry.npmjs.org/jose/-/jose-4.8.1.tgz"
+  "version" "4.8.1"
+
+"js-sha256@^0.9.0", "js-sha256@0.9.0":
   "integrity" "sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA=="
   "resolved" "https://registry.npmjs.org/js-sha256/-/js-sha256-0.9.0.tgz"
   "version" "0.9.0"
@@ -16348,7 +16411,7 @@
     "randombytes" "^2.1.0"
     "utf8" "3.0.0"
 
-"web3modal@1.9.5":
+"web3modal@^1.9", "web3modal@1.9.5":
   "integrity" "sha512-L5ME6zgoaCDa+T66skW9WpxGOJX6vU9v+7aLacoQJhU3AMTk784ionpX+Pg4UdhdM+UQW+odge32GkwEX11czQ=="
   "resolved" "https://registry.npmjs.org/web3modal/-/web3modal-1.9.5.tgz"
   "version" "1.9.5"

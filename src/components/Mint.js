@@ -71,7 +71,7 @@ export const Mint = () => {
         `<a target="_blank" href="${metadata.url}" >View NFT metadata</a>`
       );
       const tx = await NFTRegistry.setName(name, metadata.url, {
-        value: ethers.utils.parseEther("0.3"),
+        value: ethers.utils.parseEther("0"),
       });
       const txhash = await tx.wait();
       handleNewNotification(
@@ -99,7 +99,7 @@ export const Mint = () => {
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       console.log(url);
       const tx = await NFTRegistry.setName(name, url, {
-        value: ethers.utils.parseEther("0.3"),
+        value: ethers.utils.parseEther("0"),
       });
       const txhash = await tx.wait();
       handleNewNotification(

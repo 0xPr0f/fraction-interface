@@ -21,10 +21,12 @@ import { useNotification } from "web3uikit";
 import { networkParams } from "./utils/rpc";
 import { getChainById } from "./utils/networks";
 import { Tooltip } from "@mui/material";
+import * as UAuthWeb3Modal from "@uauth/web3modal";
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
 });
+// Register the web3modal so the connector has access to it.
 
 function App() {
   const dispatch = useNotification();
@@ -54,6 +56,7 @@ function App() {
 
   const connectWallet = async () => {
     try {
+      UAuthWeb3Modal.registerWeb3Modal(web3Modal);
       const provider = await web3Modal.connect();
       const library = new ethers.providers.Web3Provider(provider);
       const accounts = await library.listAccounts();
