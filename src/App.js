@@ -98,6 +98,152 @@ function App() {
   async function loadStuff() {
     setblock(await getBlockHeight(80001));
   }
+  /// lol manual hardcore styles, do not try this at home, school or anywhere
+  function removeotherthemes1() {
+    document.getElementById("btn2").style.color = "";
+    document.getElementById("btn2").style.boxShadow = "";
+    //
+    document.getElementById("btn3").style.color = "";
+    document.getElementById("btn3").style.boxShadow = "";
+    //
+    document.getElementById("btn4").style.color = "";
+    document.getElementById("btn4").style.boxShadow = "";
+    //
+    document.getElementById("btn5").style.color = "";
+    document.getElementById("btn5").style.boxShadow = "";
+    //
+    document.getElementById("btn6").style.color = "";
+    document.getElementById("btn6").style.boxShadow = "";
+  }
+  function removeotherthemes2() {
+    document.getElementById("btn2").style.color = "";
+    document.getElementById("btn2").style.boxShadow = "";
+    //
+    document.getElementById("btn3").style.color = "";
+    document.getElementById("btn3").style.boxShadow = "";
+    //
+    document.getElementById("btn4").style.color = "";
+    document.getElementById("btn4").style.boxShadow = "";
+    //
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+    //
+    document.getElementById("btn6").style.color = "";
+    document.getElementById("btn6").style.boxShadow = "";
+  }
+  function removeotherthemes3() {
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+    //
+    document.getElementById("btn3").style.color = "";
+    document.getElementById("btn3").style.boxShadow = "";
+    //
+    document.getElementById("btn4").style.color = "";
+    document.getElementById("btn4").style.boxShadow = "";
+    //
+    document.getElementById("btn5").style.color = "";
+    document.getElementById("btn5").style.boxShadow = "";
+    //
+    document.getElementById("btn6").style.color = "";
+    document.getElementById("btn6").style.boxShadow = "";
+  }
+  function removeotherthemes4() {
+    document.getElementById("btn2").style.color = "";
+    document.getElementById("btn2").style.boxShadow = "";
+    //
+    document.getElementById("btn4").style.color = "";
+    document.getElementById("btn4").style.boxShadow = "";
+    //
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+    //
+    document.getElementById("btn5").style.color = "";
+    document.getElementById("btn5").style.boxShadow = "";
+    //
+    document.getElementById("btn6").style.color = "";
+    document.getElementById("btn6").style.boxShadow = "";
+  }
+  function removeotherthemes5() {
+    document.getElementById("btn2").style.color = "";
+    document.getElementById("btn2").style.boxShadow = "";
+    //
+    document.getElementById("btn3").style.color = "";
+    document.getElementById("btn3").style.boxShadow = "";
+    //
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+    //
+    document.getElementById("btn5").style.color = "";
+    document.getElementById("btn5").style.boxShadow = "";
+    //
+    document.getElementById("btn6").style.color = "";
+    document.getElementById("btn6").style.boxShadow = "";
+  }
+  function removeotherthemes6() {
+    document.getElementById("btn2").style.color = "";
+    document.getElementById("btn2").style.boxShadow = "";
+    //
+    document.getElementById("btn3").style.color = "";
+    document.getElementById("btn3").style.boxShadow = "";
+    //
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+    //
+    document.getElementById("btn5").style.color = "";
+    document.getElementById("btn5").style.boxShadow = "";
+    //
+    document.getElementById("btn1").style.color = "";
+    document.getElementById("btn1").style.boxShadow = "";
+  }
+  var path = window.location.pathname;
+  if (path === "/") {
+    if (document.getElementById("btn1") !== null) {
+      removeotherthemes1();
+      document.getElementById("btn1").style.color = "#0363ff";
+      document.getElementById("btn1").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+  } else if (path === "/mint") {
+    if (document.getElementById("btn5") !== null) {
+      removeotherthemes2();
+      document.getElementById("btn5").style.color = "#0363ff";
+      document.getElementById("btn5").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+    console.log("mint lol");
+  } else if (path === "/fraction") {
+    if (document.getElementById("btn2") !== null) {
+      removeotherthemes3();
+      document.getElementById("btn2").style.color = "#0363ff";
+      document.getElementById("btn2").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+    console.log("fraction lol");
+  } else if (path === "/stake") {
+    if (document.getElementById("btn3") !== null) {
+      removeotherthemes4();
+      document.getElementById("btn3").style.color = "#0363ff";
+      document.getElementById("btn3").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+    console.log("stake lol");
+  } else if (path === "/analytics") {
+    if (document.getElementById("btn4") !== null) {
+      removeotherthemes5();
+      document.getElementById("btn4").style.color = "#0363ff";
+      document.getElementById("btn4").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+  } else if (path === "/faucet") {
+    if (document.getElementById("btn6") !== null) {
+      removeotherthemes6();
+      document.getElementById("btn6").style.color = "#0363ff";
+      document.getElementById("btn6").style.boxShadow =
+        "inset 4px 0 0 0 RGB(3, 99, 255)";
+    }
+  }
+  console.log(path);
+  //if()
   const switchNetwork = async () => {
     try {
       await library.provider.request({

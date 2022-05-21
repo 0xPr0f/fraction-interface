@@ -66,7 +66,7 @@ const User = () => {
         <div className="pageboxanalytics">
           <br />
           <br />
-
+          <span style={{ fontSize: "60px" }}>Your Stats</span>
           <>
             <br />
             <div style={{ width: "750px" }}>
