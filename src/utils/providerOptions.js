@@ -6,7 +6,7 @@ import UAuthSPA from "@uauth/js";
 // These options are used to construct the UAuthSPA instance.
 export const uauthOptions = {
   clientID: "63d984f1-2c8a-4f8c-958f-cca9edba3c6e",
-  redirectUri: "http://localhost:3000",
+  redirectUri: "https://frac-tion.vercel.app/",
   // Must include both the openid and wallet scopes.
   scope: "openid wallet",
 };
