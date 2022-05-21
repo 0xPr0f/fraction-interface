@@ -99,15 +99,17 @@ export const Faucet = () => {
               </span>
             </div>
             <br />
-            <div className="buttonCard">
-              <button
-                onClick={() => {
-                  requestFunds();
-                }}
-                className="buttonstandardFaucet"
-              >
-                Receive
-              </button>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div className="buttonCard">
+                <button
+                  onClick={() => {
+                    requestFunds();
+                  }}
+                  className="buttonstandardFaucet"
+                >
+                  Receive
+                </button>
+              </div>
             </div>
           </div>
         </div>
