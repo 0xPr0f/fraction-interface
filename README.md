@@ -13,7 +13,7 @@ We also offer the ability to mint a soulbound nft that bound users to their asse
 ### [Fraction Contracts](https://github.com/0xPr0f/Fraction-contracts)
 https://github.com/0xPr0f/Fraction-contracts
 
-[Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+# [Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
 <!--
 ---
 ## sample branch of the fraction protocol
