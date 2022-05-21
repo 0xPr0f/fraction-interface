@@ -341,24 +341,27 @@ function App() {
     updateNav();
   });
   function updateNav() {
-    if (window.localStorage.getItem("sidebar") !== "closed") {
-      document.getElementById("mySidenav").style.width = "100px";
-      document.getElementById("main").style.marginLeft = "50px";
-    } else if (window.localStorage.getItem("sidebar") === "closed") {
-      document.getElementById("mySidenav").style.width = "260px";
-      document.getElementById("main").style.marginLeft = "260px";
+    if (window.localStorage.getItem("sidebar")) {
+      if (window.localStorage.getItem("sidebar") === "closed") {
+        document.getElementById("mySidenav").style.width = "100px";
+        document.getElementById("main").style.marginLeft = "50px";
+      } else if (window.localStorage.getItem("sidebar") !== "closed") {
+        document.getElementById("mySidenav").style.width = "260px";
+        document.getElementById("main").style.marginLeft = "260px";
+      }
     }
   }
   function closeNav() {
-    if (window.localStorage.getItem("sidebar") !== "closed") {
+    if (window.localStorage.getItem("sidebar") === "closed") {
       document.getElementById("mySidenav").style.width = "100px";
       document.getElementById("main").style.marginLeft = "50px";
-      window.localStorage.setItem("sidebar", "closed");
+      window.localStorage.setItem("sidebar", "open");
+
       setBarposition(window.localStorage.getItem("sidebar"));
     } else {
       document.getElementById("mySidenav").style.width = "260px";
       document.getElementById("main").style.marginLeft = "260px";
-      window.localStorage.setItem("sidebar", "open");
+      window.localStorage.setItem("sidebar", "closed");
       setBarposition(window.localStorage.getItem("sidebar"));
     }
     // document.getElementById("mySidenav").style.display = "none";
@@ -368,12 +371,14 @@ function App() {
       <Router>
         <div>
           <div id="mySidenav" className="sidenav">
-            <img
-              style={{ marginRight: "26px" }}
-              width="210"
-              height="130"
-              src="https://bafybeieijgccfdoqzpqv43nozfserw7a4mq54mlwm7whepkyw6gumw2s6m.ipfs.infura-ipfs.io/"
-            />
+            {window.localStorage.getItem("sidebar") !== "closed" ? (
+              <img
+                style={{ marginRight: "26px" }}
+                width="210"
+                height="130"
+                src="https://bafybeieijgccfdoqzpqv43nozfserw7a4mq54mlwm7whepkyw6gumw2s6m.ipfs.infura-ipfs.io/"
+              />
+            ) : null}
             <span
               style={{ fontSize: "35px", marginLeft: "50px" }}
               onClick={() => {
@@ -528,6 +533,24 @@ function App() {
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
+            <Tooltip
+              title="any weird stuff on the site, please reload the page"
+              arrow
+              placement="top-start"
+            >
+              <div
+                onClick={() => {
+                  redirect(
+                    "https://github.com/0xPr0f/Fraction-interface/tree/maindev"
+                  );
+                }}
+                className="block"
+              >
+                {" "}
+                Made by crispy for the HackMoney Hackathon 2022 : Alpha test
+                version
+              </div>
+            </Tooltip>
             <Tooltip
               title="The latest block number on the selected chain"
               arrow
