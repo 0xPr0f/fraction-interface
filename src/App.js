@@ -47,7 +47,7 @@ function App() {
       message: message,
       title: title,
       icon: undefined,
-      duration: 40,
+      duration: 50,
       position: "topR",
     });
   };
@@ -210,7 +210,6 @@ function App() {
       document.getElementById("btn5").style.boxShadow =
         "inset 4px 0 0 0 RGB(3, 99, 255)";
     }
-    console.log("mint lol");
   } else if (path === "/fraction") {
     if (document.getElementById("btn2") !== null) {
       removeotherthemes3();
@@ -218,7 +217,6 @@ function App() {
       document.getElementById("btn2").style.boxShadow =
         "inset 4px 0 0 0 RGB(3, 99, 255)";
     }
-    console.log("fraction lol");
   } else if (path === "/stake") {
     if (document.getElementById("btn3") !== null) {
       removeotherthemes4();
@@ -226,7 +224,6 @@ function App() {
       document.getElementById("btn3").style.boxShadow =
         "inset 4px 0 0 0 RGB(3, 99, 255)";
     }
-    console.log("stake lol");
   } else if (path === "/analytics") {
     if (document.getElementById("btn4") !== null) {
       removeotherthemes5();
@@ -242,8 +239,6 @@ function App() {
         "inset 4px 0 0 0 RGB(3, 99, 255)";
     }
   }
-  console.log(path);
-  //if()
   const switchNetwork = async () => {
     try {
       await library.provider.request({

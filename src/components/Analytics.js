@@ -212,7 +212,7 @@ export const Analytics = () => {
                     fontSize: "15px",
                   }}
                 >
-                  Decimal
+                  Decimal of FRACT
                   <br />
                 </span>
                 18
@@ -224,7 +224,7 @@ export const Analytics = () => {
                     fontSize: "15px",
                   }}
                 >
-                  Decimal
+                  Decimal of FRACTx
                   <br />
                 </span>
                 18

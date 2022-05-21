@@ -50,11 +50,10 @@ const User = () => {
         await getTokenBalance(address, "80001", FractxTokenAddress)
       )
     );
-    setWrapped(
-      ethers.utils.formatEther(
-        await getTokenBalance(address, "80001", FractionlessAddress)
-      )
-    );
+    const _wrap = await FractionlessWrapperContract.wrappedAssets(address);
+
+    setWrapped(_wrap.toString());
+
     const _stake = await FractionlessWrapperContract.stakedWrappedFLTokens(
       address
     );

@@ -21,6 +21,7 @@ export const Trade = () => {
   const [wrapamount, setWrapAmount] = useState("");
   const [wraptype, setWraptype] = useState("");
   const [tokenWrapped, settokenWrapped] = useState();
+  const [tokenWWrapped, settokenWWrapped] = useState();
   const [checked, setChecked] = useState(false);
 
   const handleNewNotification = (type, title, message) => {
@@ -68,7 +69,11 @@ export const Trade = () => {
         FractionlessWrapperAddress
       );
       setAllowance(allow);
+      const _wrap = await FractionlessWrapperContract.wrappedAssets(
+        await library.getSigner().getAddress()
+      );
 
+      settokenWWrapped(_wrap.toString());
       settokenWrapped(
         ethers.utils.formatEther(
           await getTokenBalance(
@@ -185,7 +190,7 @@ export const Trade = () => {
                       float: "left",
                     }}
                   >
-                    Wrapped FRACT tokens in wallet : {tokenWrapped} FRACT
+                    Wrapped FRACT tokens in wallet : {tokenWWrapped} FRACT
                   </span>
                   <br />
                   <div>
@@ -200,7 +205,16 @@ export const Trade = () => {
                         }}
                       />
                     </div>
-                    <div style={{ float: "left" }}>Stake Rewards : {}</div>
+                    <div style={{ float: "left" }}>
+                      Wrap Rewards : {tokenWWrapped} - {unwrapamount} ={" "}
+                      {tokenWWrapped - unwrapamount}
+                    </div>
+                    <br />
+                    <br />
+                    <div style={{ float: "left" }}>
+                      Stream : {(tokenWWrapped - unwrapamount) * 60 * 60 * 24}{" "}
+                      wei/day
+                    </div>
                     <br />
                   </div>
                   <br />

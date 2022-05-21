@@ -64,6 +64,7 @@ export const Mint = () => {
         description: description,
         image: file,
       });
+      console.log(metadata.url);
       handleNewNotification(
         "success",
         "Metadata Uploaded",
@@ -81,7 +82,6 @@ export const Mint = () => {
       console.log("mint with normal");
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
-      console.log("Error uploading file: ", e);
     }
   }
 
@@ -97,6 +97,7 @@ export const Mint = () => {
       });
       const added = await client.add(data);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      console.log(url);
       const tx = await NFTRegistry.setName(name, url, {
         value: ethers.utils.parseEther("0.3"),
       });

@@ -17,7 +17,7 @@ export const Stake = () => {
   const [staketype, setStaketype] = useState("");
   const [tokeninwallet, settokeninwallet] = useState("");
   const [tokenstaked, settokenStaked] = useState("");
-  const [approved, setApproved] = useState(";");
+  const [approved, setApproved] = useState("");
 
   var FractionlessWrapperContract;
   var FractionlessContract;
@@ -64,21 +64,32 @@ export const Stake = () => {
         FractionlessWrapperAddress
       );
       setApproved(appr);
-      settokeninwallet(
-        await getTokenBalance(
-          await library.getSigner().getAddress(),
-          "80001",
-          FractionlessAddress
-        )
+      const _wrap = await FractionlessWrapperContract.wrappedAssets(
+        await library.getSigner().getAddress()
       );
+      settokeninwallet(_wrap.toString());
+
       const stakedtkn = await FractionlessWrapperContract.stakedWrappedFLTokens(
         await library.getSigner().getAddress()
       );
-      settokenStaked(stakedtkn);
+      settokenStaked(stakedtkn.toString());
     }
   }
   async function approveFRACTIONbeforeTransfer() {
-    FractionlessContract.setApprovalForAll(FractionlessWrapperAddress, "true");
+    try {
+      const tx = await FractionlessContract.setApprovalForAll(
+        FractionlessWrapperAddress,
+        "true"
+      );
+      const txhash = tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
   }
 
   async function stake() {
