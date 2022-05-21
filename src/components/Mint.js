@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import "../styles/Mint.css";
 import { ethers } from "ethers";
 import { web3Modal } from "../App";
-import { create as ipfsHttpClient } from "ipfs-http-client";
 import { NFTRegistryABI } from "../abis/NFTRegistryABI";
+import { create as ipfsHttpClient } from "ipfs-http-client";
 import { FractionNFTAddress, NFTRegistryAddress } from "../utils/utils";
 import { useNotification } from "web3uikit";
 import { FractionNFTABI } from "../abis/FractionNFTABI";
+import { NFTStorage } from "nft.storage/dist/bundle.esm.min.js";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 export const Mint = () => {
@@ -20,9 +21,14 @@ export const Mint = () => {
   const [github, setGithub] = useState("");
   const [description, setDescription] = useState("");
   const [balance, setbalance] = useState(0);
+  const [file, setFile] = useState();
 
   var NFTRegistry;
   var FractionNFT;
+
+  const apiKey =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDQwNDRjNDhkN2U5M0RkQjlhODA5MTQ1MzlEQWZiNjg4RWIyNzI4NDEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MjczNjUzMTA1NSwibmFtZSI6IkZyYWN0aW9uIn0.ZOS37Ide4XE-1pp_W6V89IPpIVI-iNqYtaIGqRs9sa4";
+  const NFTstorage = new NFTStorage({ token: apiKey });
   useEffect(() => {
     loadContract();
   });
@@ -49,19 +55,75 @@ export const Mint = () => {
     }
   }
 
-  async function onChange(e) {
-    const file = e.target.files[0];
-    /// Note : initial plan was to use NFT.storage, but it is broken for webpack 4
-    /// and to upgrade will cause other dependecies to break too
+  async function mint() {
+    if (!name || !description) return;
+    if (name.length < 2 || description.length < 5) return;
     try {
-      const added = await client.add(file, {
+      const metadata = await NFTstorage.store({
+        name: name,
+        description: description,
+        image: file,
+      });
+      handleNewNotification(
+        "success",
+        "Metadata Uploaded",
+        `<a target="_blank" href="${metadata.url}" >View NFT metadata</a>`
+      );
+      const tx = await NFTRegistry.setName(name, metadata.url, {
+        value: ethers.utils.parseEther("0.3"),
+      });
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+      console.log("mint with normal");
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+      console.log("Error uploading file: ", e);
+    }
+  }
+
+  async function mintdefault() {
+    try {
+      if (!name) return;
+      const data = JSON.stringify({
+        name: name,
+        description:
+          "Fraction NFT to determine your Fraction and earnings on wrapped erc20 and semi-fungible stakes",
+        image:
+          "https://ipfs.infura.io/ipfs/QmcdCYBWj2yjZmxPczDrW5V79XN3KiUZgpH7gUqJAuHSRH",
+      });
+      const added = await client.add(data);
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      const tx = await NFTRegistry.setName(name, url, {
+        value: ethers.utils.parseEther("0.3"),
+      });
+      const txhash = await tx.wait();
+      handleNewNotification(
+        "success",
+        "Trasaction completed",
+        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+      );
+      console.log("mint with defualt");
+    } catch (e) {
+      handleNewNotification("error", "Error", `${e.message}`);
+    }
+  }
+  async function onChange(e) {
+    const _file = e.target.files[0];
+    setFile(_file);
+    console.log(_file);
+    try {
+      const added = await client.add(_file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       handleNewNotification(
         "success",
         "Upload completed",
-        `<a target="_blank" href="https://ipfs.infura.io/ipfs/${added.path}" >Image Url</a>`
+        `<a target="_blank" href="https://ipfs.infura.io/ipfs/${added.path}" > View image and uploaded url</a>`
       );
       console.log(url);
       setFileUrl(url);
@@ -136,59 +198,7 @@ export const Mint = () => {
       position: "topR",
     });
   };
-  async function mint() {
-    if (!name || !description || !fileUrl) return;
-    console.log("mint with custom");
-    console.log(name + " was created");
-    const data = JSON.stringify({
-      name,
-      description,
-      image: fileUrl,
-    });
-    try {
-      const added = await client.add(data);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      const tx = await NFTRegistry.setName(name, url, {
-        value: ethers.utils.parseEther("0.3"),
-      });
-      const txhash = await tx.wait();
-      handleNewNotification(
-        "success",
-        "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
-      );
-      console.log("mint with normal");
-    } catch (e) {
-      handleNewNotification("error", "Error", `${e.message}`);
-      console.log("Error uploading file: ", e);
-    }
-  }
-  async function mintdefault() {
-    try {
-      if (!name) return;
-      const data = JSON.stringify({
-        name: name,
-        description:
-          "Fraction NFT to determine your Fraction and earnings on semi-fungible stakes",
-        image:
-          "https://ipfs.infura.io/ipfs/QmcdCYBWj2yjZmxPczDrW5V79XN3KiUZgpH7gUqJAuHSRH",
-      });
-      const added = await client.add(data);
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      const tx = await NFTRegistry.setName(name, url, {
-        value: ethers.utils.parseEther("0.3"),
-      });
-      const txhash = await tx.wait();
-      handleNewNotification(
-        "success",
-        "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
-      );
-      console.log("mint with defualt");
-    } catch (e) {
-      handleNewNotification("error", "Error", `${e.message}`);
-    }
-  }
+
   function Minttype(type) {
     if (minttype === type) {
       setMintype("3");
