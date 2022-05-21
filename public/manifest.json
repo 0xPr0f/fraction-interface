@@ -3,17 +3,17 @@
   "name": "Fraction protocol, combining NFT and DEFI",
   "icons": [
     {
-      "src": "https://ipfs.infura.io/ipfs/QmPbnmhhUuEmM6sp5XU2ESi9VytPfTVsLLZmi5JW1UxH7y",
+      "src": "fract.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "https://ipfs.infura.io/ipfs/QmPbnmhhUuEmM6sp5XU2ESi9VytPfTVsLLZmi5JW1UxH7y",
+      "src": "fract.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "https://ipfs.infura.io/ipfs/QmPbnmhhUuEmM6sp5XU2ESi9VytPfTVsLLZmi5JW1UxH7y",
+      "src": "fract.png",
       "type": "image/png",
       "sizes": "512x512"
     }
