@@ -77,7 +77,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
       console.log("mint with normal");
     } catch (e) {
@@ -105,7 +105,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
       console.log("mint with defualt");
     } catch (e) {
@@ -141,7 +141,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
@@ -155,7 +155,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
@@ -169,7 +169,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
@@ -183,7 +183,7 @@ export const Mint = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);

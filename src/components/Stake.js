@@ -85,7 +85,7 @@ export const Stake = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
@@ -99,7 +99,7 @@ export const Stake = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
@@ -112,7 +112,7 @@ export const Stake = () => {
       handleNewNotification(
         "success",
         "Trasaction completed",
-        `<a target="_blank" href="https://mumbai.polygonscan.com/tx/${txhash.transactionHash}" >Completed Transaction hash</a>`
+        `https://mumbai.polygonscan.com/tx/${txhash.transactionHash}`
       );
     } catch (e) {
       handleNewNotification("error", "Error", `${e.message}`);
