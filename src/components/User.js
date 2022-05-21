@@ -7,7 +7,6 @@ import { getTokenBalance } from "../utils/covalentDataSource";
 import { FractionWrapperABI } from "../abis/FractionWrapperABI";
 import {
   FractionlessWrapperAddress,
-  FractionlessAddress,
   FractTokenAddress,
   FractxTokenAddress,
   redirect,

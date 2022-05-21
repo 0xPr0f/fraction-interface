@@ -22,6 +22,7 @@ import { networkParams } from "./utils/rpc";
 import { getChainById } from "./utils/networks";
 import { Tooltip } from "@mui/material";
 import * as UAuthWeb3Modal from "@uauth/web3modal";
+
 export const web3Modal = new Web3Modal({
   cacheProvider: true, // optional
   providerOptions, // required
