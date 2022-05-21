@@ -368,6 +368,11 @@ function App() {
       <Router>
         <div>
           <div id="mySidenav" className="sidenav">
+            <img
+              width="230"
+              height="150"
+              src="https://ipfs.infura.io/ipfs/QmPbnmhhUuEmM6sp5XU2ESi9VytPfTVsLLZmi5JW1UxH7y"
+            />
             <span
               style={{ fontSize: "35px", marginLeft: "50px" }}
               onClick={() => {
