@@ -533,24 +533,7 @@ function App() {
             {/*Add extra stuff here below */}
 
             {/*end of add extra stuff here below */}
-            <Tooltip
-              title="any weird stuff on the site, please reload the page"
-              arrow
-              placement="top-start"
-            >
-              <div
-                onClick={() => {
-                  redirect(
-                    "https://github.com/0xPr0f/Fraction-interface/tree/maindev"
-                  );
-                }}
-                className="block"
-              >
-                {" "}
-                Made by crispy for the HackMoney Hackathon 2022 : Alpha test
-                version
-              </div>
-            </Tooltip>
+
             <Tooltip
               title="The latest block number on the selected chain"
               arrow
@@ -574,6 +557,25 @@ function App() {
                   }}
                   icon="fa-solid fa-circle"
                 />
+              </div>
+            </Tooltip>
+            <Tooltip
+              title="any weird stuff on the site, please reload the page"
+              arrow
+              placement="top-start"
+            >
+              <div
+                style={{ marginLeft: "45px" }}
+                onClick={() => {
+                  redirect(
+                    "https://github.com/0xPr0f/Fraction-interface/tree/maindev"
+                  );
+                }}
+                className="block"
+              >
+                {" "}
+                Made by crispy for the HackMoney Hackathon 2022 : Alpha test
+                version
               </div>
             </Tooltip>
           </div>

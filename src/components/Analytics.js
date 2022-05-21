@@ -306,7 +306,9 @@ export const Analytics = () => {
                 ERC721
               </div>
             </div>
+            <br />
           </div>
+          <br />
         </div>
       </div>
     </div>
