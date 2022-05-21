@@ -8,7 +8,6 @@ import {
   FractionlessWrapperAddress,
 } from "../utils/utils";
 import { FractionlessABI } from "../abis/FractionlessABI";
-import { getTokenBalance } from "../utils/covalentDataSource";
 import { useNotification } from "web3uikit";
 export const Stake = () => {
   const dispatch = useNotification();
