@@ -27,9 +27,11 @@ https://github.com/0xPr0f/Fraction-contracts
 ### https://fractiondev.netlify.app
 -->
 
-This project was made with 
+This project was made with/on
 * superfuild
 * walletconnect
 * coinbase wallet
 * ipfs/filecoin
+* polygon
 * covalent
+e.t.c
