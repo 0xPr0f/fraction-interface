@@ -35,3 +35,12 @@ This project was made with/on
 * polygon
 * covalent
 e.t.c
+
+
+
+## All info about Fraction protocol
+
+* [showcase and explantory video on fraction protocol] (https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+* [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
+* [live site on polygon mumbai](https://frac-tion.vercel.app/)
+* point of contact : reach out to me through github or twitter (@praiseprof)
