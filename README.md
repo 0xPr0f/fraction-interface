@@ -29,16 +29,6 @@ https://github.com/0xPr0f/Fraction-contracts
 -->
 
 
-This project was made with/on
-* superfuild
-* walletconnect
-* coinbase wallet
-* ipfs/filecoin
-* polygon
-* covalent
-e.t.c
-
-
 ## All info about Fraction protocol
 
 * [showcase and explantory video on fraction protocol](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
