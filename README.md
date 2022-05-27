@@ -1,4 +1,4 @@
-## This is the maindev branch, This is also the branch all work is done for the ethglobal hackmoney 2022 hackathon
+## This is the maindev branch, This is also the branch all work is done for the fraction protocol UI 
 
 ## https://frac-tion.vercel.app/
 
@@ -12,8 +12,9 @@ We also offer the ability to mint a soulbound nft that bound users to their asse
 
 ### [Fraction Contracts](https://github.com/0xPr0f/Fraction-contracts)
 https://github.com/0xPr0f/Fraction-contracts
-
+<!--
 # [Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+-->
 <!--
 ---
 ## sample branch of the fraction protocol
