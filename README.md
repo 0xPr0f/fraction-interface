@@ -29,7 +29,7 @@ https://github.com/0xPr0f/Fraction-contracts
 ### https://fractiondev.netlify.app
 -->
 ## All info about Fraction protocol
-* protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
+* Fraction protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
 * [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
 * [GUI code](https://github.com/0xPr0f/Fraction-interface/tree/maindev)
 * [live site](https://frac-tion.vercel.app/)
