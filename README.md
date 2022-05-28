@@ -14,6 +14,7 @@ We also offer the ability to mint a soulbound nft that bound users to their asse
 https://github.com/0xPr0f/Fraction-contracts
 <!--
 # [Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+[showcase and explantory video on fraction protocol] (https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
 -->
 <!--
 ---
@@ -27,10 +28,8 @@ https://github.com/0xPr0f/Fraction-contracts
 
 ### https://fractiondev.netlify.app
 -->
-
 ## All info about Fraction protocol
-
-* [showcase and explantory video on fraction protocol](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+* protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
 * [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
 * [GUI code](https://github.com/0xPr0f/Fraction-interface/tree/maindev)
 * [live site](https://frac-tion.vercel.app/)
