@@ -1,4 +1,4 @@
-## The branch to visit is the maindev branch, This is also the branch all work is done for the ethglobal hackmoney 2022 hackathon
+## The branch to visit is the maindev branch, That is the branch where all the GUI for the fraction protocol is done
 
 ## https://frac-tion.vercel.app/
 
@@ -17,6 +17,8 @@ https://github.com/0xPr0f/Fraction-contracts
 ---
 ## sample branch of the fraction protocol
 
+* [showcase and explantory video on fraction protocol](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+
 ### https://fractionapp.vercel.app
 
 ---
@@ -27,8 +29,7 @@ https://github.com/0xPr0f/Fraction-contracts
 -->
 
 ## All info about Fraction protocol
-
-* [showcase and explantory video on fraction protocol](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
+* protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
 * [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
 * [GUI code](https://github.com/0xPr0f/Fraction-interface/tree/maindev)
 * [live site](https://frac-tion.vercel.app/)
