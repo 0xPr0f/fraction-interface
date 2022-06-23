@@ -9,7 +9,7 @@ Fraction is a protocol that allow users to earn on a particular asset, the abili
 We also offer the ability to mint a soulbound nft that bound users to their assets and earn them more interests in the streams
 
 ### context:   
-Fraction is a protocol that allow users to earn on a particular asset, the ability to wrap an asset (usually a stablecoin) to an ERC1155 and earn yield in form of superfluid streams of a custom token. We also offer the ability to mint a soulbound nft that bound users to their assets and we use unstoppable domain to login with their domain names as proof of humanity to earn them more interests in the reward streams of our ERC20 token. Although not mentioned in the video, the contracts were deployed and the inferface is only currently available on polygon mumbai chain and we are looking forward to a migration to mainnet.       
+Fraction is a protocol that allow users to earn on a particular asset, the ability to wrap an asset (usually a stablecoin) to an ERC1155 and earn yield in form of superfluid streams of a custom token. We also offer the ability to mint a soulbound nft that bound users to their assets and we use unstoppable domain to login with their domain names as proof of humanity to earn them more interests in the reward streams of our ERC20 token. Although not mentioned in the video, the contracts were deployed and the inferface is only currently available on polygon mumbai chain and we are looking forward to a migration to mainnet. We also have/created an analytic dashboard made with covalent api to query data around the protocol.              
 
 we integrate different protocols :
 - covalent : covalent is used to make our analytics dashboard (where we determine the tokensholders, balance of users e.t.c)         
