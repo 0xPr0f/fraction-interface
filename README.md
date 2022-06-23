@@ -20,6 +20,13 @@ we integrate different protocols :
 ## Fraction Protocol Contracts
 
 ### [Fraction Contracts](https://github.com/0xPr0f/Fraction-contracts)
+
+Project Name : Fraction
+Code Repo : https://github.com/0xPr0f/Fraction-interface/tree/maindev
+Video: https://www.youtube.com/watch?v=JuVF0JAdlb8
+Discord ID : 0xProf#7686
+UD email address: 0xprofoz@gmail.com
+
 https://github.com/0xPr0f/Fraction-contracts
 <!--
 # [Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
