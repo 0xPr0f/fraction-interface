@@ -21,10 +21,10 @@ we integrate different protocols :
 
 ### [Fraction Contracts](https://github.com/0xPr0f/Fraction-contracts)
 
-Project Name : Fraction
-Code Repo : https://github.com/0xPr0f/Fraction-interface/tree/maindev
-Video: https://www.youtube.com/watch?v=JuVF0JAdlb8
-Discord ID : 0xProf#7686
+Project Name : Fraction         
+Code Repo : https://github.com/0xPr0f/Fraction-interface/tree/maindev       
+Video: https://www.youtube.com/watch?v=JuVF0JAdlb8         
+Discord ID : 0xProf#7686       
 UD email address: 0xprofoz@gmail.com
 
 https://github.com/0xPr0f/Fraction-contracts
