@@ -22,12 +22,8 @@ we integrate different protocols :
 ### [Fraction Contracts](https://github.com/0xPr0f/Fraction-contracts)
 
 Project Name : Fraction         
-Code Repo : https://github.com/0xPr0f/Fraction-interface/tree/maindev       
-Video: https://www.youtube.com/watch?v=JuVF0JAdlb8         
-Discord ID : 0xProf#7686       
-UD email address: 0xprofoz@gmail.com
-
-https://github.com/0xPr0f/Fraction-contracts
+Code Repo : https://github.com/0xPr0f/Fraction-interface/tree/maindev          
+https://github.com/0xPr0f/Fraction-contracts      
 <!--
 # [Submission page](https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
 [showcase and explantory video on fraction protocol] (https://showcase.ethglobal.com/hackmoney2022/fraction-fqvbu)
@@ -48,5 +44,4 @@ https://github.com/0xPr0f/Fraction-contracts
 * Fraction protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
 * [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
 * [GUI code](https://github.com/0xPr0f/Fraction-interface/tree/maindev)
-* [live site](https://frac-tion.vercel.app/)
-* point of contact : reach out to me through github or twitter (@praiseprof)
+* [live site](https://frac-tion.vercel.app/)        
