@@ -1,4 +1,4 @@
-## This is the maindev branch, This is also the branch all work is done for the fraction protocol UI 
+## This is the master branch, The maindev is the branch all work is done for the fraction protocol UI 
 
 ## https://frac-tion.vercel.app/
 
@@ -42,7 +42,6 @@ https://github.com/0xPr0f/Fraction-contracts
 * Fraction protocol is currently on polygon mumbai and that is where all smart contracts are deployed on
 * [smart contracts](https://github.com/0xPr0f/Fraction-contracts)
 * [GUI code](https://github.com/0xPr0f/Fraction-interface/tree/maindev)
-* [live site](https://frac-tion.vercel.app/)
-* point of contact : reach out to me through github or twitter (@praiseprof)
+* [live site](https://frac-tion.vercel.app/)   
 
 
